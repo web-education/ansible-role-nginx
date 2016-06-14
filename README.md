@@ -260,6 +260,53 @@ Additional configuration are created in /etc/nginx/conf.d/
                - root "/usr/share/nginx/html"
                - index index.html
 ```
+8) Example vars file for [ENTCore](https://github.com/entcore/entcore) setup:
+```yaml
+# The user to run nginx
+nginx_user: "www-data"
+nginx_worker_processes: 'auto'
+nginx_worker_rlimit_nofile: 100480
+# A list of directives for the events section.
+nginx_events_params:
+ - worker_connections 8192
+ - use epoll
+ - multi_accept on
+
+# A list of hashs that define the servers for nginx,
+# as with http parameters. Any valid server parameters
+# can be defined here.
+nginx_sites:
+ server-status:
+     - listen 80
+     - server_name localhost
+     - location /nginx_status {
+         stub_status on;
+         access_log off;
+         allow 127.0.0.1;
+         deny all;
+       }
+ent_sites:
+ cool-ent:
+   server_name: 'cool-ent.opendigitaleducation.com'
+   nodes:
+     - '10.0.0.1'
+     - '10.0.0.2'
+   ssl_certificate: '/etc/ssl/star.opendigitaleducation.com/crt'
+   ssl_certificate_key: '/etc/ssl/star.opendigitaleducation.com/key'
+   upstream_suffix: 'vertx.lan'
+   serve_statics: true
+   statics_path: '/var/www/web-education/static'
+
+nginx_configs:
+  proxy:
+      - proxy_set_header X-Real-IP  $remote_addr
+      - proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for
+  gzip:
+      - gzip on
+      - gzip_disable msie6
+
+
+```
 
 Dependencies
 ------------
