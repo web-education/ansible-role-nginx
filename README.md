@@ -305,7 +305,30 @@ nginx_configs:
       - gzip on
       - gzip_disable msie6
 
-
+```
+For ENTCore's applications' upstreams, a list of web services must be defined:
+```yaml
+web_services:
+  - name: 'portal'
+    port: 8017
+  - name: 'infra'
+    port: 8001
+  - name: 'directory'
+    port: 8003
+  - name: 'history'
+    port: 8006
+  - name: 'auth'
+    port: 8009
+  - name: 'workspace'
+    port: 8011
+  - name: 'appregistry'
+    port: 8012
+  - name: 'communication'
+    port: 8015
+  - name: 'workspace'
+    port: 8011
+    options:
+      - 'client_max_body_size 1024M'
 ```
 
 Dependencies
