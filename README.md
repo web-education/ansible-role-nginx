@@ -4,6 +4,7 @@ nginx
 This role installs and configures the nginx web server. The user can specify
 any http configuration parameters they wish to apply their site. Any number of
 sites can be added with configurations of your choice.
+It also has a special template to configure nginx for [ENTCore](https://github.com/entcore/entcore)
 
 [![Build Status](https://travis-ci.org/jdauphant/ansible-role-nginx.svg?branch=master)](https://travis-ci.org/jdauphant/ansible-role-nginx)
 [![Ansible Galaxy](https://img.shields.io/ansible/role/466.svg)](https://galaxy.ansible.com/jdauphant/nginx/)
