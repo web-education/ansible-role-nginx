@@ -3,6 +3,12 @@ upstream {{ web_service.name }}.{{ ent_sites[item].upstream_suffix }} {
 {% for node in ent_sites[item].nodes %}
   server     {{ node }}:{{ web_service.port }}  fail_timeout=10s;
 {% endfor %}
+{% if ent_sites[item].upstream_options is defined %}
+{% for upstream_option in ent_sites[item].upstream_options %}
+  {{ upstream_option }};
+{% endfor %}
+{% endif %}
+ 
 }
 {% endfor %}
 
