@@ -142,4 +142,6 @@ web_services:
     port: 8105
   - name: 'calendar'
     port: 8098
+  - name: 'searchengine'
+    port: 8053
 
