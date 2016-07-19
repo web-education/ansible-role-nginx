@@ -112,7 +112,7 @@ server {
 {% if ent_sites[item].serve_statics %}
   
   location /404.html {
-    root ent_sites[item].serve_statics;
+    root /var/www/web-education/static/errors;
   }
   location /50x.html {
     root /var/www/web-education/static/errors;
