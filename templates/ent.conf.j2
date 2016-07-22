@@ -17,7 +17,7 @@ upstream {{ web_service.name }}.{{ ent_sites[item].upstream_suffix }} {
   map $remote_addr $log_ip {
 {% for ip in ent_sites[item].ignore_logs_ips %}
     {{ ip }} 0;
-{% endfor % }
+{% endfor %}
     default 1;
   }
 {% endif %}
