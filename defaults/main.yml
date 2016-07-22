@@ -144,4 +144,6 @@ web_services:
     port: 8098
   - name: 'searchengine'
     port: 8053
+  - name: 'statistics'
+    port: 8042
 
