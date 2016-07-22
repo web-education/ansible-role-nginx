@@ -13,12 +13,12 @@ upstream {{ web_service.name }}.{{ ent_sites[item].upstream_suffix }} {
 
 {% if ent_sites[item].ignore_logs is defined and ent_sites[item].ignore_logs == true %}
 {% if ent_sites[item].ignore_logs_ips is defined %}
-  map $remote_addr $log_ip {
+map $remote_addr $log_ip {
 {% for ip in ent_sites[item].ignore_logs_ips %}
-    "{{ ip }}" 0;
+  "{{ ip }}" 0;
 {% endfor %}
-    default 1;
-  }
+  default 1;
+}
 {% endif %}
 
 {% endif %}
