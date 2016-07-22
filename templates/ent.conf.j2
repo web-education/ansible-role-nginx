@@ -42,8 +42,6 @@ server {
   }
   index  index.html index.htm index.php;
 
-  {% 
-
   access_log            /var/log/nginx/{{ ent_sites[item].server_name }}-80.access.log combined {% if ent_sites[item].ignore_logs is defined and ent_sites[item].ignore_logs %}if=$log_ip{% endif %};
   error_log             /var/log/nginx/{{ ent_sites[item].server_name }}-80.error.log;
 
