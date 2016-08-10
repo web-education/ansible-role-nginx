@@ -146,4 +146,10 @@ web_services:
     port: 8053
   - name: 'statistics'
     port: 8042
+  - name: 'homeworks'
+    port: 8224
+  - name: 'scrapbook'
+    port: 8220
+  - name: 'stats'
+    port: 8225
 
