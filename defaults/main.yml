@@ -121,7 +121,7 @@ web_services:
   - name: 'collaborativewall'
     port: 8071
   - name: 'mindmap'
-    port: 8105
+    port: 8666
   - name: 'timelinegenerator'
     port: 8099
   - name: 'cursus'
