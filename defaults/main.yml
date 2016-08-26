@@ -121,7 +121,7 @@ web_services:
   - name: 'collaborativewall'
     port: 8071
   - name: 'mindmap'
-    port: 8105
+    port: 8666
   - name: 'timelinegenerator'
     port: 8099
   - name: 'cursus'
@@ -146,4 +146,10 @@ web_services:
     port: 8053
   - name: 'statistics'
     port: 8042
+  - name: 'homeworks'
+    port: 8224
+  - name: 'scrapbook'
+    port: 8220
+  - name: 'stats'
+    port: 8225
 
