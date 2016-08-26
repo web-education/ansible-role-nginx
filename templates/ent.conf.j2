@@ -10,8 +10,8 @@ upstream {{ web_service.name }}.{{ ent_sites[item].upstream_suffix }} {
 {% endif %}
 }
 {% endfor %}
-
-{% if ent_sites[item].ignore_logs_ips is defined and ent_sites[item].ignore_logs_ips|length > 0 %}
+{% set ignore_logs = ent_sites[item].ignore_logs_ips is defined and ent_sites[item].ignore_logs_ips|length > 0 %}
+{% if ignore_logs %}
 map $remote_addr $log_ip {
 {% for ip in ent_sites[item].ignore_logs_ips %}
   "{{ ip }}" 0;
@@ -38,7 +38,7 @@ server {
   }
   index  index.html index.htm index.php;
 
-  access_log            /var/log/nginx/{{ ent_sites[item].server_name }}-80.access.log combined {% if ent_sites[item].ignore_logs is defined and ent_sites[item].ignore_logs %}if=$log_ip{% endif %};
+  access_log            /var/log/nginx/{{ ent_sites[item].server_name }}-80.access.log combined {% if ignore_logs %}if=$log_ip{% endif %};
   error_log             /var/log/nginx/{{ ent_sites[item].server_name }}-80.error.log;
 
   location / {
