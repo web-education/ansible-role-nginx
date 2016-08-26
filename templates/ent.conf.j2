@@ -11,8 +11,7 @@ upstream {{ web_service.name }}.{{ ent_sites[item].upstream_suffix }} {
 }
 {% endfor %}
 
-{% if ent_sites[item].ignore_logs is defined and ent_sites[item].ignore_logs == true %}
-{% if ent_sites[item].ignore_logs_ips is defined %}
+{% if ent_sites[item].ignore_logs_ips is defined and ent_sites[item].ignore_logs_ips|length > 0 %}
 map $remote_addr $log_ip {
 {% for ip in ent_sites[item].ignore_logs_ips %}
   "{{ ip }}" 0;
@@ -20,9 +19,6 @@ map $remote_addr $log_ip {
   default 1;
 }
 {% endif %}
-
-{% endif %}
-
 
 server {
   listen                *:80;
