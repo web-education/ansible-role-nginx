@@ -119,14 +119,20 @@ server {
 {% if ent_sites[item].serve_statics %}
   
   location /404.html {
-    root /var/www/web-education/static/errors;
+    root {{ ent_sites[item].statics_path }}/errors;
   }
   location /50x.html {
-    root /var/www/web-education/static/errors;
+    root {{ ent_sites[item].statics_path }}/errors;
   }
   location /502.html {
-    root /var/www/web-education/static/errors;
+    root {{ ent_sites[item].statics_path }}/errors;
   }
+  location /help/ {
+    root      {{ ent_sites[item].statics_path }};
+    autoindex off;
+    index     index.html index.htm index.php;
+  }
+
 {% for web_service in web_services %}
 {% if web_service != 'portal' %}
   location /{{ web_service.name }}/public/ {
