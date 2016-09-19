@@ -152,4 +152,6 @@ web_services:
     port: 8220
   - name: 'stats'
     port: 8225
+  - name: 'xiti'
+    port: 8049
 
