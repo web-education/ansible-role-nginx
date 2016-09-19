@@ -78,7 +78,12 @@ server {
   error_page 404  /404.html;
   error_page 500 503 504 /50x.html;
   error_page 502 /502.html;
-  
+
+{% if ent_sites[item].options is defined %}  
+{% for option in ent_sites[item].options %}
+  {{ option }}
+{% endfor %}
+{% endif %}
   
   location /userbook {
     proxy_pass            http://directory.{{ ent_sites[item].upstream_suffix }};
