@@ -334,6 +334,7 @@ default_apps_2d:
     port: 8019
   - name: 'blog'
     port: 8018
+    ...
 default_apps_1d:
   - name: 'portal'
     port: 8017
