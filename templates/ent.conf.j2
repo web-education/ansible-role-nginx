@@ -1,7 +1,8 @@
-{% for web_service in web_services %}
-upstream {{ web_service.name }}.{{ ent_sites[item].upstream_suffix }} {
+{% if ent_sites[item].upstreams is defined %}
+{% for upstream in ent_sites[item].upstreams %}
+upstream {{ upstream.name }}.{{ ent_sites[item].upstream_suffix }} {
 {% for node in ent_sites[item].nodes %}
-  server     {{ node }}:{{ web_service.port }}  fail_timeout=10s;
+  server     {{ node }}:{{ upstream.port }}  fail_timeout=10s;
 {% endfor %}
 {% if ent_sites[item].upstream_options is defined %}
 {% for upstream_option in ent_sites[item].upstream_options %}
@@ -10,6 +11,8 @@ upstream {{ web_service.name }}.{{ ent_sites[item].upstream_suffix }} {
 {% endif %}
 }
 {% endfor %}
+{% endif %}
+
 {% set ignore_logs = ent_sites[item].ignore_logs_ips is defined and ent_sites[item].ignore_logs_ips|length > 0 %}
 {% if ignore_logs %}
 map $remote_addr $log_ip {
@@ -79,11 +82,12 @@ server {
   error_page 500 503 504 /50x.html;
   error_page 502 /502.html;
 
-{% if ent_sites[item].options is defined %}  
+{% if ent_sites[item].options is defined %}
 {% for option in ent_sites[item].options %}
-  {{ option }}
+  {{ option }};
 {% endfor %}
 {% endif %}
+ 
   
   location /userbook {
     proxy_pass            http://directory.{{ ent_sites[item].upstream_suffix }};
@@ -97,18 +101,14 @@ server {
     proxy_set_header      X-Forwarded-Proto $scheme;
   }
 
-{% for web_service in web_services %}
-{% if web_service.name != 'portal' %} 
-  location /{{ web_service.name }} {
+{% if ent_sites[item].upstreams is defined %}
+{% for upstream in ent_sites[item].upstreams %}
+{% if upstream.name != 'portal' %}
+  location /{{ upstream.name }} {
 {% else %}
   location / {
 {% endif %}
-{% if web_service.options is defined %}
-{% for option in web_service.options %}
-    {{ option }};
-{% endfor %}
-{% endif %}
-    proxy_pass            http://{{ web_service.name }}.{{ ent_sites[item].upstream_suffix }};
+    proxy_pass            http://{{ upstream.name }}.{{ ent_sites[item].upstream_suffix }};
     proxy_read_timeout    90;
     proxy_connect_timeout 90;
     proxy_redirect        off;
@@ -120,7 +120,9 @@ server {
   }
   
 {% endfor %}
-  
+{% endif %}
+
+ 
 {% if ent_sites[item].serve_statics %}
   
   location /404.html {
@@ -138,9 +140,10 @@ server {
     index     index.html index.htm index.php;
   }
 
-{% for web_service in web_services %}
-{% if web_service != 'portal' %}
-  location /{{ web_service.name }}/public/ {
+{% if ent_sites[item].upstreams is defined %}
+{% for upstream in ent_sites[item].upstreams %}
+{% if upstream != 'portal' %}
+  location /{{ upstream.name }}/public/ {
     root {{ ent_sites[item].statics_path }};
 {% else %}
   location /public/ {
@@ -150,6 +153,7 @@ server {
     index index.html index.htm index.php;
   }
 {% endfor %}
+{% endif %}
   
 {% endif %}
 }
