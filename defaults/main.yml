@@ -67,7 +67,7 @@ nginx_remove_auth_basic_files: []
 
 nginx_daemon_mode: "on"
 
-web_services:
+default_apps_2d:
   - name: 'portal'
     port: 8017
   - name: 'infra'
@@ -146,6 +146,60 @@ web_services:
     port: 8053
   - name: 'statistics'
     port: 8042
+  - name: 'xiti'
+    port: 8049
+
+default_apps_1d:
+  - name: 'portal'
+    port: 8017
+  - name: 'infra'
+    port: 8001
+  - name: 'directory'
+    port: 8003
+  - name: 'history'
+    port: 8006
+  - name: 'auth'
+    port: 8009
+  - name: 'workspace'
+    port: 8011
+  - name: 'appregistry'
+    port: 8012
+  - name: 'communication'
+    port: 8015
+  - name: 'conversation'
+    port: 8019
+  - name: 'blog'
+    port: 8018
+  - name: 'timeline'
+    port: 8016
+  - name: 'cas'
+    port: 8023
+  - name: 'archive'
+    port: 8004
+  - name: 'wiki'
+    port: 8030
+  - name: 'support'
+    port: 8027
+  - name: 'rss'
+    port: 8028
+  - name: 'rack'
+    port: 8031
+  - name: 'bookmark'
+    port: 8032
+  - name: 'community'
+    port: 8078
+  - name: 'eliot'
+    port: 8029
+  - name: 'cursus'
+    port: 8085
+  - name: 'maxicours'
+    port: 8046
+  - name: 'cns'
+    port: 8086
+  - name: 'sso'
+    port: 8041
+  - name: 'diary'
+    port: 8054
   - name: 'homeworks'
     port: 8224
   - name: 'scrapbook'
