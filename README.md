@@ -311,7 +311,7 @@ nginx_configs:
       - gzip_disable msie6
 
 ```
-For convinience, most of ENTCore's default verticles are defined in two variables, depending on whether it's a 1d or 2d instance:
+For convenience, most of ENTCore's default verticles are defined in two variables, depending on whether it's a 1d or 2d instance:
 ```yaml
 default_apps_2d:
   - name: 'portal'
