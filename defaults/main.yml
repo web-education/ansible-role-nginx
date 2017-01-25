@@ -208,4 +208,6 @@ default_apps_1d:
     port: 8225
   - name: 'xiti'
     port: 8049
+  - name: 'schoolbook'
+    port: 8106
 
