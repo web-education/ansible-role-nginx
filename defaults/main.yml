@@ -120,6 +120,8 @@ default_apps_2d:
     port: 8070
   - name: 'collaborativewall'
     port: 8071
+  - name: 'collaborativeeditor'
+    port: 8668
   - name: 'mindmap'
     port: 8666
   - name: 'timelinegenerator'
