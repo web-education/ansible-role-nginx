@@ -57,6 +57,7 @@ nginx_sites:
      - root "{% if ansible_os_family == 'FreeBSD' %}/usr/local/www/nginx-dist{% else %}/usr/share/nginx/html{% endif %}"
      - index index.html
 nginx_remove_sites: []
+ent_sites: {}
 
 nginx_configs: {}
 nginx_stream_configs: {}
