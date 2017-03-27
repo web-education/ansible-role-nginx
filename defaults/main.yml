@@ -151,6 +151,8 @@ default_apps_2d:
     port: 8042
   - name: 'xiti'
     port: 8049
+  - name: 'viescolaire'
+    port: 8128
 
 default_apps_1d:
   - name: 'portal'
