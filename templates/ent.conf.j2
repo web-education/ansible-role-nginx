@@ -119,7 +119,7 @@ server {
 {% if upstream.options is defined %}
     # extra options
 {% for option in upstream.options %}
-    {{ option }}
+    {{ option }};
 {% endfor %}
 {% endif %}
   }
