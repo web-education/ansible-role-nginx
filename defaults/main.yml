@@ -206,8 +206,10 @@ default_apps_1d:
   - name: 'diary'
     port: 8054
   - name: 'homeworks'
+    cors: yes
     port: 8224
   - name: 'scrapbook'
+    cors: yes
     port: 8220
   - name: 'stats'
     port: 8225
@@ -215,4 +217,3 @@ default_apps_1d:
     port: 8049
   - name: 'schoolbook'
     port: 8106
-

@@ -149,6 +149,23 @@ server {
 {% for upstream in ent_sites[item].upstreams %}
 {% if upstream != 'portal' %}
   location /{{ upstream.name }}/public/ {
+    {% if ent_sites[item].cors is defined and ent_sites[item].cors and upstream.cors is defined  %}
+    if ($request_method = 'OPTIONS') {
+      add_header 'Access-Control-Allow-Origin' '{{ent_sites[item].cors}}';
+      add_header 'Access-Control-Allow-Methods' 'GET, OPTIONS';
+      add_header 'Access-Control-Max-Age' 86400;
+      add_header 'Content-Type' 'text/plain charset=UTF-8';
+      add_header 'Content-Length' 0;
+      return 204;
+    }
+    if ($request_method = 'GET') {
+      add_header 'Access-Control-Allow-Origin' '{{ent_sites[item].cors}}';
+      add_header 'Access-Control-Allow-Methods' 'GET, OPTIONS';
+    }
+
+
+    {% endif %}
+
     root {{ ent_sites[item].statics_path }};
 {% else %}
   location /public/ {
