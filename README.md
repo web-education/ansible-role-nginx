@@ -301,14 +301,18 @@ ent_sites:
    # upstreams should be defined in the ENT site.   
    upstreams: [{name: 'actualites', port: 8022}, {name: 'appregistry', port: 8012}, {name: 'archive', port: 8004}, {name: 'auth', port: 8009}, {name: 'blog', port: 8018}, {name: 'bookmark', port: 8032}, {name: 'calendar', port: 8098}, {name: 'cas', port: 8023}, {name: 'cns', port: 8086}, {name: 'collaborativewall', port: 8071}, {name: 'communication', port: 8015}, {name: 'community', port: 8078}, {name: 'conversation', port: 8019}, {name: 'cursus', port: 8085}, {name: 'diary', port: 8054}, {name: 'directory', port: 8003}, {name: 'exercizer', port: 8105}, {name: 'forum', port: 8024}, {name: 'history', port: 8006}, {name: 'infra', port: 8001}, {name: 'maxicours', port: 8046}, {name: 'mindmap', port: 8666}, {name: 'pages', port: 8025}, {name: 'poll', port: 8070}, {name: 'portal', port: 8017}, {name: 'rack', port: 8031}, {name: 'rbs', port: 8026}, {name: 'rss', port: 8028}, {name: 'searchengine', port: 8053}, {port: 8052, name: 'sharebigfiles', options: ['client_max_body_size 1024M']}, {name: 'statistics', port: 8042}, {name: 'support', port: 8027}, {name: 'timeline', port: 8016}, {name: 'timelinegenerator', port: 8099}, {name: 'wiki', port: 8030}, {name: 'workspace', port: 8011}]
     #  or you can use the default apps variables:
-    upstreams: "{{ default_apps_2d }}"
-nginx_configs:
+   upstreams: "{{ default_apps_2d }}"
+   cors: 'other-cool-ent.opendigitaleducation.com' # if you wanna do cors between applications
+   
+nginx_configs: # each nginx_config will generate a config file in /etc/nginx/conf.d
   proxy:
       - proxy_set_header X-Real-IP  $remote_addr
       - proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for
   gzip:
       - gzip on
       - gzip_disable msie6
+  security:
+      - ssl_dhparam /etc/ssl/dhparam.pem # provided that you generated your own diffie-hellman parameters
 
 ```
 For convenience, most of ENTCore's default verticles are defined in two variables, depending on whether it's a 1d or 2d instance:
@@ -352,6 +356,12 @@ default_apps_1d:
     port: 8012
   - name: 'communication'
     port: 8015
+  - name: 'homeworks'
+    cors: yes # cors must be enabled per app
+    port: 8224
+  - name: 'scrapbook'
+    cors: yes # cors must be enabled per app
+    port: 8220
 ...
 ```
 
