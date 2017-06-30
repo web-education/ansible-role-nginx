@@ -156,9 +156,7 @@ default_apps_2d:
     port: 8128
   - name: audio
     port: 6502
-    options:
-      - proxy_set_header Upgrade $http_upgrade
-      - proxy_set_header Connection "upgrade"
+    is_websocket: true
 
 default_apps_1d:
   - name: 'portal'
@@ -225,6 +223,4 @@ default_apps_1d:
     port: 8106
   - name: audio
     port: 6502
-    options:
-      - proxy_set_header Upgrade $http_upgrade
-      - proxy_set_header Connection "upgrade"
+    is_websocket: true

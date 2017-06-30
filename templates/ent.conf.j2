@@ -109,13 +109,21 @@ server {
   location / {
 {% endif %}
     proxy_pass            http://{{ upstream.name }}.{{ ent_sites[item].upstream_suffix }};
-    proxy_read_timeout    90;
-    proxy_connect_timeout 90;
     proxy_redirect        off;
     proxy_set_header      Host $host;
     proxy_set_header      X-Real-IP $remote_addr;
     proxy_set_header      X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header      X-Forwarded-Proto $scheme;
+{% if upstream.is_websocket is defined and upstream.is_websocket %}
+    proxy_read_timeout    1d;
+    proxy_connect_timeout 1d;
+    proxy_send_timeout    1d;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+{% else %}
+    proxy_read_timeout    90;
+    proxy_connect_timeout 90;
+{% endif %}
 {% if upstream.options is defined %}
     # extra options
 {% for option in upstream.options %}
