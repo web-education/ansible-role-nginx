@@ -159,10 +159,6 @@ default_apps_2d:
     options:
       - proxy_set_header Upgrade $http_upgrade
       - proxy_set_header Connection "upgrade"
-      - proxy_connect_timeout 1d
-      - proxy_send_timeout 1d
-      - proxy_read_timeout 1d
-
 
 default_apps_1d:
   - name: 'portal'
@@ -232,6 +228,3 @@ default_apps_1d:
     options:
       - proxy_set_header Upgrade $http_upgrade
       - proxy_set_header Connection "upgrade"
-      - proxy_connect_timeout 1d
-      - proxy_send_timeout 1d
-      - proxy_read_timeout 1d
