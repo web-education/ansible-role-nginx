@@ -1,0 +1,2 @@
+- name: configuring nginx logrotate
+  template: src=nginx.j2 dest=/etc/logrotate.d/nginx
