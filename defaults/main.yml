@@ -93,6 +93,7 @@ default_apps_2d:
   - name: 'timeline'
     port: 8016
   - name: 'actualites'
+    cors: yes
     port: 8022
   - name: 'cas'
     port: 8023
@@ -115,6 +116,7 @@ default_apps_2d:
   - name: 'bookmark'
     port: 8032
   - name: 'community'
+    cors: yes
     port: 8078
   - name: 'eliot'
     port: 8029
@@ -154,6 +156,8 @@ default_apps_2d:
     port: 8049
   - name: 'viescolaire'
     port: 8128
+  - name: 'scrapbook'
+    port: 8220
   - name: audio
     port: 6502
     is_websocket: true
@@ -213,7 +217,6 @@ default_apps_1d:
     cors: yes
     port: 8224
   - name: 'scrapbook'
-    cors: yes
     port: 8220
   - name: 'stats'
     port: 8225
@@ -221,6 +224,10 @@ default_apps_1d:
     port: 8049
   - name: 'schoolbook'
     port: 8106
+  - name: 'mindmap'
+    port: 8666
+  - name: 'timelinegenerator'
+    port: 8099
   - name: audio
     port: 6502
     is_websocket: true
