@@ -135,7 +135,25 @@ server {
 {% endfor %}
 {% endif %}
 
- 
+{% if ent_sites[item].etherpad_host is defined %}
+  location = /pad                { deny all; }
+  location = /pad/                { deny all; }
+
+  location /pad {
+    rewrite ^/pad(/.*)$ $1 break;
+    proxy_pass        http://{{ ent_sites[item].etherpad_host }}:8102;
+    proxy_buffering   off;
+    proxy_set_header  Host             $host;
+    proxy_set_header  X-Real-IP        $remote_addr;
+    proxy_set_header  X-Forwarded-For  $remote_addr;
+    proxy_set_header  X-Forwarded-Proto $scheme;
+  #Conf required for websocket
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+  }
+{% endif %}
+
 {% if ent_sites[item].serve_statics %}
   
   location /404.html {
