@@ -69,6 +69,103 @@ nginx_remove_auth_basic_files: []
 
 nginx_daemon_mode: "on"
 
+default_apps:
+  - name: 'portal'
+    port: 8017
+  - name: 'infra'
+    port: 8001
+  - name: 'directory'
+    port: 8003
+  - name: 'history'
+    port: 8006
+  - name: 'auth'
+    port: 8009
+  - name: 'workspace'
+    port: 8011
+  - name: 'appregistry'
+    port: 8012
+  - name: 'communication'
+    port: 8015
+  - name: 'conversation'
+    port: 8019
+  - name: 'blog'
+    port: 8018
+  - name: 'timeline'
+    port: 8016
+  - name: 'actualites'
+    port: 8022
+  - name: 'cas'
+    port: 8023
+  - name: 'archive'
+    port: 8004
+  - name: 'forum'
+    port: 8024
+  - name: 'pages'
+    port: 8025
+  - name: 'wiki'
+    port: 8030
+  - name: 'rbs'
+    port: 8026
+  - name: 'support'
+    port: 8027
+  - name: 'rss'
+    port: 8028
+  - name: 'rack'
+    port: 8031
+  - name: 'bookmark'
+    port: 8032
+  - name: 'community'
+    port: 8078
+  - name: 'eliot'
+    port: 8029
+  - name: 'poll'
+    port: 8070
+  - name: 'collaborativewall'
+    port: 8071
+  - name: 'collaborativeeditor'
+    port: 8668
+  - name: 'mindmap'
+    port: 8666
+  - name: 'timelinegenerator'
+    port: 8099
+  - name: 'cursus'
+    port: 8085
+  - name: 'maxicours'
+    port: 8046
+  - name: 'cns'
+    port: 8086
+  - name: 'sso'
+    port: 8041
+  - name: 'diary'
+    port: 8054
+  - name: 'sharebigfiles'
+    port: 8052
+    options:
+      - 'client_max_body_size 1024M'
+  - name: 'exercizer'
+    port: 8105
+  - name: 'calendar'
+    port: 8098
+  - name: 'searchengine'
+    port: 8053
+  - name: 'statistics'
+    port: 8042
+  - name: 'xiti'
+    port: 8049
+  - name: 'viescolaire'
+    port: 8128
+  - name: 'scrapbook'
+    port: 8220
+  - name: 'homeworks'
+    port: 8224
+  - name: 'stats'
+    port: 8225
+  - name: 'schoolbook'
+    port: 8106
+  - name: audio
+    port: 6502
+    is_websocket: true
+
 default_apps_2d:
   - name: 'portal'
     port: 8017
