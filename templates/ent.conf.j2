@@ -27,7 +27,7 @@ server {
   listen                *:80;
   server_name           {{ ent_sites[item].server_name }};
 
-  client_max_body_size 50M;
+  client_max_body_size {{ ent_sites[item].client_max_body_size|default('50M') }};
 
   gzip_types text/plain text/css application/javascript application/xml application/json text/json text/xml text/javascript/image/svg+xml application/vnd.ms-fontobject application/x-font-ttf font/opentype;
   gzip_proxied any;
@@ -68,7 +68,7 @@ server {
   ssl_prefer_server_ciphers on;
 
 
-  client_max_body_size 50M;
+  client_max_body_size {{ ent_sites[item].client_max_body_size|default('50M') }};
 
   gzip_types text/plain text/css application/javascript application/xml application/json text/json text/xml text/javascript/image/svg+xml application/vnd.ms-fontobject application/x-font-ttf font/opentype;
   gzip_proxied any;
