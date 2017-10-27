@@ -41,8 +41,8 @@ server {
   }
   index  index.html index.htm index.php;
 
-  access_log            /var/log/nginx/{{ ent_sites[item].server_name }}-80.access.log combined {% if ignore_logs %}if=$log_ip{% endif %};
-  error_log             /var/log/nginx/{{ ent_sites[item].server_name }}-80.error.log;
+  access_log            /var/log/nginx/{{ ent_sites[item].server_name | replace(' ', '_') }}-80.access.log combined {% if ignore_logs %}if=$log_ip{% endif %};
+  error_log             /var/log/nginx/{{ ent_sites[item].server_name | replace(' ', '_') }}-80.error.log;
 
   location / {
     proxy_pass            http://portal.{{ ent_sites[item].upstream_suffix }};
@@ -74,8 +74,8 @@ server {
   gzip_proxied any;
   index  index.html index.htm index.php;
 
-  access_log            /var/log/nginx/{{ ent_sites[item].server_name }}.access.log combined {% if ent_sites[item].ignore_logs is defined and ent_sites[item].ignore_logs %}if=$log_ip{% endif %};
-  error_log             /var/log/nginx/{{ ent_sites[item].server_name }}.error.log;
+  access_log            /var/log/nginx/{{ ent_sites[item].server_name | replace(' ', '_') }}.access.log combined {% if ent_sites[item].ignore_logs is defined and ent_sites[item].ignore_logs %}if=$log_ip{% endif %};
+  error_log             /var/log/nginx/{{ ent_sites[item].server_name | replace(' ', '_') }}.error.log;
 
   proxy_intercept_errors on;
   error_page 404  /404.html;
