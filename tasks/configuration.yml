@@ -16,7 +16,7 @@
   notify:
    - reload nginx
   tags: [configuration,nginx]
-  
+
 - name: Create the configurations for ENT sites
   template: src=ent.conf.j2 dest={{nginx_conf_dir}}/sites-available/{{ item }}.conf
   with_items: "{{ ent_sites.keys() | difference(nginx_remove_sites) }}"
@@ -30,13 +30,13 @@
   notify:
    - reload nginx
   tags: [configuration,nginx]
-  
+
 - name: Create links for ENT sites
   file: state=link src={{nginx_conf_dir}}/sites-available/{{ item }}.conf dest={{nginx_conf_dir}}/sites-enabled/{{ item }}.conf
   with_items: "{{ ent_sites.keys() | difference(nginx_remove_sites) }}"
   notify:
    - reload nginx
-  tags: [configuration,nginx]
+  tags: [ent,nginx]
 
 - name: Create the configurations for independent config file
   template: src=config.conf.j2 dest={{nginx_conf_dir}}/conf.d/{{ item }}.conf
