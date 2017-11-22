@@ -154,6 +154,17 @@ server {
   }
 {% endif %}
 
+{% if ent_sites[item].gomail_host is defined %}
+  location /pixel {
+    proxy_pass        http://{{ ent_sites[item].gomail_host }}:7500;
+    proxy_buffering   off;
+    proxy_set_header  Host             $host;
+    proxy_set_header  X-Real-IP        $remote_addr;
+    proxy_set_header  X-Forwarded-For  $proxy_add_x_forwarded_for;
+    proxy_set_header  X-Forwarded-Proto $scheme;
+  }
+{% endif %}
+
 {% if ent_sites[item].serve_statics %}
   
   location /404.html {
