@@ -165,6 +165,8 @@ default_apps:
   - name: audio
     port: 6502
     is_websocket: true
+  - name: 'admin'
+    port: 8089
 
 default_apps_2d:
   - name: 'portal'
@@ -258,6 +260,8 @@ default_apps_2d:
   - name: audio
     port: 6502
     is_websocket: true
+  - name: 'admin'
+    port: 8089
 
 default_apps_1d:
   - name: 'portal'
@@ -328,3 +332,6 @@ default_apps_1d:
   - name: audio
     port: 6502
     is_websocket: true
+  - name: 'admin'
+    port: 8089
+
