@@ -169,6 +169,8 @@ default_apps:
     port: 8017
   - name: 'admin'
     port: 8089
+  - name: 'lystore'
+    port: 8140
 
 default_apps_2d:
   - name: 'portal'
@@ -266,6 +268,8 @@ default_apps_2d:
     port: 8017
   - name: 'admin'
     port: 8089
+  - name: 'lystore'
+    port: 8140
 
 default_apps_1d:
   - name: 'portal'
