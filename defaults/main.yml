@@ -154,6 +154,8 @@ default_apps:
     port: 8049
   - name: 'viescolaire'
     port: 8128
+  - name: 'competences'
+    port: 8129
   - name: 'scrapbook'
     port: 8220
   - name: 'homeworks'
