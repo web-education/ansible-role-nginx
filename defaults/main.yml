@@ -296,6 +296,8 @@ default_apps_1d:
     port: 8018
   - name: 'timeline'
     port: 8016
+  - name: 'actualites'
+    port: 8022
   - name: 'cas'
     port: 8023
   - name: 'archive'
