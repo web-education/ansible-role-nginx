@@ -310,6 +310,8 @@ default_apps_1d:
     port: 8028
   - name: 'rack'
     port: 8031
+  - name: 'collaborativeeditor'
+    port: 8668
   - name: 'bookmark'
     port: 8032
   - name: 'community'
