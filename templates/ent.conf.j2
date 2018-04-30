@@ -87,8 +87,9 @@ server {
   {{ option }};
 {% endfor %}
 {% endif %}
- 
-  
+
+  rewrite ^/cas/logout$ {{ ent_sites[item].logout_cas|default('/timeline/timeline') }} redirect; 
+
   location /userbook {
     proxy_pass            http://directory.{{ ent_sites[item].upstream_suffix }};
     proxy_read_timeout    90;
