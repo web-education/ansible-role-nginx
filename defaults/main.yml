@@ -173,6 +173,14 @@ default_apps:
     port: 8089
   - name: 'lystore'
     port: 8140
+  - name: 'zimbra'
+    port: '8104'
+  - name: 'supportpivot'
+    port: '9595'
+  - name: 'edt'
+    port: '8168'
+  - name: 'presences'
+    port: '8062'
 
 default_apps_2d:
   - name: 'portal'
@@ -272,6 +280,10 @@ default_apps_2d:
     port: 8089
   - name: 'lystore'
     port: 8140
+  - name: 'zimbra'
+    port: '8104'
+  - name: 'supportpivot'
+    port: '9595'
 
 default_apps_1d:
   - name: 'portal'
@@ -350,4 +362,6 @@ default_apps_1d:
     port: 8017
   - name: 'admin'
     port: 8089
+  - name: 'supportpivot'
+    port: '9595'
 
