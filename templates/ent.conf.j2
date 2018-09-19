@@ -104,6 +104,7 @@ server {
     # CORS configuration
     add_header 'Access-Control-Allow-Origin' '{{ent_sites[item].cors}}';
     add_header 'Access-Control-Allow-Methods' 'POST';
+    add_header 'Access-Control-Allow-Methods' 'PUT';
     add_header 'Access-Control-Allow-Headers' 'authorization';
     add_header 'Access-Control-Allow-Credentials' 'true';
     if ($request_method = 'OPTIONS') {
@@ -133,8 +134,8 @@ server {
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection "upgrade";
 {% else %}
-    proxy_read_timeout    90;
-    proxy_connect_timeout 90;
+    proxy_read_timeout    {{ ent_sites[item].proxy_read_timeout|default('90') }};
+    proxy_connect_timeout {{ ent_sites[item].proxy_connect_timeout|default('90') }};
 {% endif %}
 {% if upstream.options is defined %}
     # extra options
@@ -146,6 +147,7 @@ server {
     # CORS configuration
     add_header 'Access-Control-Allow-Origin' '{{ent_sites[item].cors}}';
     add_header 'Access-Control-Allow-Methods' 'POST';
+    add_header 'Access-Control-Allow-Methods' 'PUT';
     add_header 'Access-Control-Allow-Headers' 'authorization';
     add_header 'Access-Control-Allow-Credentials' 'true';
     if ($request_method = 'OPTIONS') {
@@ -177,6 +179,7 @@ server {
     # CORS configuration
     add_header 'Access-Control-Allow-Origin' '{{ent_sites[item].cors}}';
     add_header 'Access-Control-Allow-Methods' 'POST';
+    add_header 'Access-Control-Allow-Methods' 'PUT';
     add_header 'Access-Control-Allow-Headers' 'authorization';
     add_header 'Access-Control-Allow-Credentials' 'true';
     if ($request_method = 'OPTIONS') {
