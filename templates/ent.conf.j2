@@ -90,6 +90,30 @@ server {
 
   rewrite ^/cas/logout$ {{ ent_sites[item].logout_cas|default('/timeline/timeline') }} redirect; 
 
+{% if ent_sites[item].document_root is defined %}
+  location /userbook/avatar/{
+    #try thumbnail
+    if ($uri ~ "^/userbook/avatar/(.{32})(.{2})(.{2})") {
+        set $path "avatars/$3/$2/$arg_thumbnail-$1$2$3";
+    }
+    # if exists return
+    if (-f "{{ ent_sites[item].document_root }}/$path") {
+        rewrite .* "/$path" last;
+    }
+    #if not exists try default size
+    if ($uri ~ "^/userbook/avatar/(.{32})(.{2})(.{2})") {
+        set $path "avatars/$3/$2/$1$2$3";
+    }
+    # if not exists try default avatar
+    if (!-f "{{ ent_sites[item].document_root }}/$path"){
+        set $path "avatars/ar/at/no-avatar.png";
+    }
+    # return
+    rewrite .* "/$path" last;
+  }
+
+{% endif %}
+
   location /userbook {
     proxy_pass            http://directory.{{ ent_sites[item].upstream_suffix }};
     proxy_read_timeout    90;
@@ -201,8 +225,19 @@ server {
   }
 {% endif %}
 
+{% if ent_sites[item].document_root is defined %}
+  location /avatars/ {
+    root {{ ent_sites[item].document_root }};
+    autoindex off;
+    index index.html index.htm index.php;
+    add_header Cache-Control must-revalidate;
+    etag on;
+    if_modified_since exact;
+    expires epoch;
+  }
+{% endif %}
+
 {% if ent_sites[item].serve_statics %}
-  
   location /404.html {
     root {{ ent_sites[item].statics_path }}/errors;
   }
