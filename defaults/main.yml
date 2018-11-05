@@ -181,7 +181,10 @@ default_apps:
     port: '8168'
   - name: 'presences'
     port: '8062'
-
+  - name: 'schooltoring'
+    port: '8141'
+  - name: 'mediacentre'
+    port: '8102'
 default_apps_2d:
   - name: 'portal'
     port: 8017
@@ -284,7 +287,10 @@ default_apps_2d:
     port: '8104'
   - name: 'supportpivot'
     port: '9595'
-
+  - name: 'schooltoring'
+    port: '8141'
+  - name: 'mediacentre'
+    port: '8102'
 default_apps_1d:
   - name: 'portal'
     port: 8017
@@ -364,4 +370,5 @@ default_apps_1d:
     port: 8089
   - name: 'supportpivot'
     port: '9595'
-
+  - name: 'mediacentre'
+    port: '8102'
