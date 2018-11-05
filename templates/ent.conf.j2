@@ -41,7 +41,7 @@ server {
   }
   index  index.html index.htm index.php;
 
-  access_log            /var/log/nginx/{{ ent_sites[item].server_name | replace(' ', '_') }}-80.access.log combined {% if ignore_logs %}if=$log_ip{% endif %};
+  access_log            /var/log/nginx/{{ ent_sites[item].server_name | replace(' ', '_') }}-80.access.log upstream_time {% if ignore_logs %}if=$log_ip{% endif %};
   error_log             /var/log/nginx/{{ ent_sites[item].server_name | replace(' ', '_') }}-80.error.log;
 
   location / {
@@ -74,7 +74,7 @@ server {
   gzip_proxied any;
   index  index.html index.htm index.php;
 
-  access_log            /var/log/nginx/{{ ent_sites[item].server_name | replace(' ', '_') }}.access.log combined {% if ent_sites[item].ignore_logs is defined and ent_sites[item].ignore_logs %}if=$log_ip{% endif %};
+  access_log            /var/log/nginx/{{ ent_sites[item].server_name | replace(' ', '_') }}.access.log upstream_time {% if ent_sites[item].ignore_logs is defined and ent_sites[item].ignore_logs %}if=$log_ip{% endif %};
   error_log             /var/log/nginx/{{ ent_sites[item].server_name | replace(' ', '_') }}.error.log;
 
   proxy_intercept_errors on;
@@ -247,11 +247,17 @@ server {
   location /502.html {
     root {{ ent_sites[item].statics_path }}/errors;
   }
-  location /help/ {
+  location /help-1d/ {
     root      {{ ent_sites[item].statics_path }};
     autoindex off;
     index     index.html index.htm index.php;
   }
+  location /help-2d/ {
+    root      {{ ent_sites[item].statics_path }};
+    autoindex off;
+    index     index.html index.htm index.php;
+  }
+
 
 {% if ent_sites[item].upstreams is defined %}
 {% for upstream in ent_sites[item].upstreams %}
