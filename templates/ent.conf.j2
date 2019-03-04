@@ -6,7 +6,7 @@ upstream {{ upstream.name }}.{{ ent_sites[item].upstream_suffix }} {
 {% endfor %}
 {% if ent_sites[item].upstream_options is defined %}
 {% for upstream_option in ent_sites[item].upstream_options %}
-  {{ upstream_option }};
+  {{ upstream_option }}
 {% endfor %}
 {% endif %}
 }
@@ -84,7 +84,7 @@ server {
 
 {% if ent_sites[item].options is defined %}
 {% for option in ent_sites[item].options %}
-  {{ option }};
+  {{ option }}
 {% endfor %}
 {% endif %}
 
@@ -131,6 +131,7 @@ server {
     add_header 'Access-Control-Allow-Methods' 'PUT';
     add_header 'Access-Control-Allow-Headers' 'authorization';
     add_header 'Access-Control-Allow-Credentials' 'true';
+	add_header 'Access-Control-Expose-Headers' 'Location';
     if ($request_method = 'OPTIONS') {
          return 204;
     }
@@ -174,6 +175,7 @@ server {
     add_header 'Access-Control-Allow-Methods' 'PUT';
     add_header 'Access-Control-Allow-Headers' 'authorization';
     add_header 'Access-Control-Allow-Credentials' 'true';
+	add_header 'Access-Control-Expose-Headers' 'Location';
     if ($request_method = 'OPTIONS') {
          return 204;
     }
@@ -206,6 +208,7 @@ server {
     add_header 'Access-Control-Allow-Methods' 'PUT';
     add_header 'Access-Control-Allow-Headers' 'authorization';
     add_header 'Access-Control-Allow-Credentials' 'true';
+	add_header 'Access-Control-Expose-Headers' 'Location';
     if ($request_method = 'OPTIONS') {
          return 204;
     }
