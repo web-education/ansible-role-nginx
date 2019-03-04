@@ -184,7 +184,9 @@ default_apps:
   - name: 'schooltoring'
     port: '8141'
   - name: 'mediacentre'
-    port: '8102'
+    port: '8122'
+  - name: 'lool'
+    port: '8333'
 default_apps_2d:
   - name: 'portal'
     port: 8017
@@ -272,6 +274,8 @@ default_apps_2d:
     port: 8049
   - name: 'viescolaire'
     port: 8128
+  - name: 'competences'
+    port: 8129
   - name: 'scrapbook'
     port: 8220
   - name: audio
@@ -290,7 +294,9 @@ default_apps_2d:
   - name: 'schooltoring'
     port: '8141'
   - name: 'mediacentre'
-    port: '8102'
+    port: '8122'
+  - name: 'lool'
+    port: '8333'
 default_apps_1d:
   - name: 'portal'
     port: 8017
@@ -371,4 +377,6 @@ default_apps_1d:
   - name: 'supportpivot'
     port: '9595'
   - name: 'mediacentre'
-    port: '8102'
+    port: '8122'
+  - name: 'lool'
+    port: '8333'
