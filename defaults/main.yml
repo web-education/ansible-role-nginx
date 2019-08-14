@@ -187,6 +187,10 @@ default_apps:
     port: '8122'
   - name: 'lool'
     port: '8333'
+  - name: 'moodle'
+    port: '8200'
+  - name: 'website'
+    port: '8059'
 default_apps_2d:
   - name: 'portal'
     port: 8017
@@ -297,6 +301,10 @@ default_apps_2d:
     port: '8122'
   - name: 'lool'
     port: '8333'
+  - name: 'moodle'
+    port: '8200'
+  - name: 'website'
+    port: '8059'
 default_apps_1d:
   - name: 'portal'
     port: 8017
@@ -380,3 +388,7 @@ default_apps_1d:
     port: '8122'
   - name: 'lool'
     port: '8333'
+  - name: 'moodle'
+    port: '8200'
+  - name: 'website'
+    port: '8059'
