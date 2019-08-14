@@ -185,6 +185,11 @@ default_apps:
     port: '8141'
   - name: 'mediacentre'
     port: '8122'
+  - name: 'mediacentre/ws'
+    port: 6503
+    is_websocket: true
+  - name: 'gar'
+    port: '8164'
   - name: 'lool'
     port: '8333'
   - name: 'moodle'
@@ -299,6 +304,11 @@ default_apps_2d:
     port: '8141'
   - name: 'mediacentre'
     port: '8122'
+  - name: 'mediacentre/ws'
+    port: 6503
+    is_websocket: true
+  - name: 'gar'
+    port: '8164'
   - name: 'lool'
     port: '8333'
   - name: 'moodle'
@@ -386,6 +396,11 @@ default_apps_1d:
     port: '9595'
   - name: 'mediacentre'
     port: '8122'
+  - name: 'mediacentre/ws'
+    port: 6503
+    is_websocket: true
+  - name: 'gar'
+    port: '8164'
   - name: 'lool'
     port: '8333'
   - name: 'moodle'
