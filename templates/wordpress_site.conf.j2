@@ -10,7 +10,7 @@ map $remote_addr $log_ip {
 
 server {
   listen                *:80;
-  server_name           if {% wordpress_sites[item].server_alias is defined %}{{ wordpress_sites[item].server_alias }}{% else %}{{ wordpress_sites[item].server_name }}{% endif %};
+  server_name           {% if wordpress_sites[item].server_alias is defined %}{{ wordpress_sites[item].server_alias }}{% else %}{{ wordpress_sites[item].server_name }}{% endif %};
 
   rewrite ^(.*) https://{{ wordpress_sites[item].server_name }}$1 redirect;
 
