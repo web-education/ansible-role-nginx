@@ -11,7 +11,7 @@
   tags: [configuration,nginx]
 
 - name: Create the configurations for sites
-  template: src=site.conf.j2 dest={{nginx_conf_dir}}/sites-available/{{ item }}.conf
+  template: src=wordpress_site.conf.j2 dest={{nginx_conf_dir}}/sites-available/{{ item }}.conf
   with_items: "{{ wordpress_sites.keys() | difference(nginx_remove_sites) }}"
   notify:
    - reload nginx
