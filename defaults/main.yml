@@ -164,7 +164,7 @@ default_apps:
     port: 8225
   - name: 'schoolbook'
     port: 8106
-  - name: audio
+  - name: 'audio'
     port: 6502
     is_websocket: true
   - name: 'admin-urls'
@@ -185,9 +185,10 @@ default_apps:
     port: '8141'
   - name: 'mediacentre'
     port: '8122'
-  - name: 'mediacentre/ws'
+  - name: 'mediacentre.ws'
     port: 6503
     is_websocket: true
+    location: 'mediacentre/ws'
   - name: 'gar'
     port: '8164'
   - name: 'lool'
@@ -287,7 +288,7 @@ default_apps_2d:
     port: 8129
   - name: 'scrapbook'
     port: 8220
-  - name: audio
+  - name: 'audio'
     port: 6502
     is_websocket: true
   - name: 'admin-urls'
@@ -304,9 +305,10 @@ default_apps_2d:
     port: '8141'
   - name: 'mediacentre'
     port: '8122'
-  - name: 'mediacentre/ws'
+  - name: 'mediacentre.ws'
     port: 6503
     is_websocket: true
+    location: 'mediacentre/ws'
   - name: 'gar'
     port: '8164'
   - name: 'lool'
@@ -385,7 +387,7 @@ default_apps_1d:
     port: 8666
   - name: 'timelinegenerator'
     port: 8099
-  - name: audio
+  - name: 'audio'
     port: 6502
     is_websocket: true
   - name: 'admin-urls'
@@ -396,9 +398,10 @@ default_apps_1d:
     port: '9595'
   - name: 'mediacentre'
     port: '8122'
-  - name: 'mediacentre/ws'
+  - name: 'mediacentre.ws'
     port: 6503
     is_websocket: true
+    location: 'mediacentre/ws'
   - name: 'gar'
     port: '8164'
   - name: 'lool'

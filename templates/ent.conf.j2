@@ -142,7 +142,11 @@ server {
 {% if ent_sites[item].upstreams is defined %}
 {% for upstream in ent_sites[item].upstreams %}
 {% if upstream.name != 'portal' %}
+{% if upstream.location is defined %}
+  location /{{ upstream.location }} {
+{% else %}
   location /{{ upstream.name }} {
+{% endif %}
 {% else %}
   location / {
 {% endif %}
@@ -269,7 +273,11 @@ server {
 {% if ent_sites[item].upstreams is defined %}
 {% for upstream in ent_sites[item].upstreams %}
 {% if upstream != 'portal' %}
+{% if upstream.location is defined %}
+  location /{{ upstream.location }}/public/ {
+{% else %}
   location /{{ upstream.name }}/public/ {
+{% endif %}
     {% if ent_sites[item].cors is defined and ent_sites[item].cors and upstream.cors is defined  %}
     if ($request_method = 'OPTIONS') {
       add_header 'Access-Control-Allow-Origin' '{{ent_sites[item].cors}}';
