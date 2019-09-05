@@ -197,6 +197,8 @@ default_apps:
     port: '8200'
   - name: 'website'
     port: '8059'
+  - name: 'crm'
+    port: '8064'
 default_apps_2d:
   - name: 'portal'
     port: 8017
@@ -317,6 +319,8 @@ default_apps_2d:
     port: '8200'
   - name: 'website'
     port: '8059'
+  - name: 'crm'
+    port: '8064'
 default_apps_1d:
   - name: 'portal'
     port: 8017
@@ -410,3 +414,5 @@ default_apps_1d:
     port: '8200'
   - name: 'website'
     port: '8059'
+  - name: 'crm'
+    port: '8064'
