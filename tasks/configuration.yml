@@ -24,6 +24,12 @@
    - reload nginx
   tags: [ent,nginx,entnonha]
 
+- name: Create htpasswd if defined
+  htpasswd: path={{ item.value.authentication.file }} name={{ item.value.authentication.used }} password='{{ item.value.authentication.password }}'
+  with_items: "{{ ent_sites.keys() }}"
+  when: item.value.authentication.file is defined or item.value.authentication.used is defined or item.value.authentication.password is defined
+  tags: [ent,nginx,entnonha]
+
 - name: Create links for sites-enabled
   file: state=link src={{nginx_conf_dir}}/sites-available/{{ item }}.conf dest={{nginx_conf_dir}}/sites-enabled/{{ item }}.conf
   with_items: "{{ wordpress_sites.keys() | difference(nginx_remove_sites) }}"

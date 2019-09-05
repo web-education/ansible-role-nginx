@@ -111,7 +111,34 @@ server {
     # return
     rewrite .* "/$path" last;
   }
+{% endif %}
 
+{% if ent_sites[item].authentication.file is defined %}
+  location = /auth/login {
+    auth_basic                  "Restricted";
+    auth_basic_user_file        {{ ent_sites[item].authentication.file }};
+
+    proxy_pass            http://auth.{{ ent_sites[item].upstream_suffix }};
+    proxy_redirect        off;
+    proxy_set_header      Host $host;
+    proxy_set_header      X-Real-IP $remote_addr;
+    proxy_set_header      X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header      X-Forwarded-Proto $scheme;
+    proxy_read_timeout    {{ ent_sites[item].proxy_read_timeout|default('90') }};
+    proxy_connect_timeout {{ ent_sites[item].proxy_read_timeout|default('90') }};
+{% if ent_sites[item].cors is defined %}
+    # CORS configuration
+    add_header 'Access-Control-Allow-Origin' '{{ent_sites[item].cors}}';
+    add_header 'Access-Control-Allow-Methods' 'POST';
+    add_header 'Access-Control-Allow-Methods' 'PUT';
+    add_header 'Access-Control-Allow-Headers' 'authorization';
+    add_header 'Access-Control-Allow-Credentials' 'true';
+	  add_header 'Access-Control-Expose-Headers' 'Location';
+    if ($request_method = 'OPTIONS') {
+         return 204;
+    }
+{% endif %}
+  }
 {% endif %}
 
   location /userbook {
@@ -183,7 +210,7 @@ server {
     add_header 'Access-Control-Allow-Methods' 'PUT';
     add_header 'Access-Control-Allow-Headers' 'authorization';
     add_header 'Access-Control-Allow-Credentials' 'true';
-	add_header 'Access-Control-Expose-Headers' 'Location';
+	  add_header 'Access-Control-Expose-Headers' 'Location';
     if ($request_method = 'OPTIONS') {
          return 204;
     }
