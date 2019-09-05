@@ -1,0 +1,17 @@
+---
+- name: Create the configurations for ENT sites
+  template: src=ent.conf.j2 dest={{nginx_conf_dir}}/sites-available/{{ item.key }}.conf
+  notify:
+   - reload nginx
+  tags: [ent,nginx,entnonha]
+
+- name: Create htpasswd if defined
+  htpasswd: path={{ item.value.authentication.file }} name={{ item.value.authentication.used }} password='{{ item.value.authentication.password }}'
+  when: item.value.authentication.file is defined or item.value.authentication.used is defined or item.value.authentication.password is defined
+  tags: [ent,nginx,entnonha]
+
+- name: Create links for ENT sites
+  file: state=link src={{nginx_conf_dir}}/sites-available/{{ item.key }}.conf dest={{nginx_conf_dir}}/sites-enabled/{{ item.key }}.conf
+  notify:
+   - reload nginx
+  tags: [ent,nginx,entnonha]
