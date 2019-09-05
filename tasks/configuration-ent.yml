@@ -5,6 +5,11 @@
    - reload nginx
   tags: [ent,nginx,entnonha]
 
+- name: Install htpasswd package
+  apt: name=apache2-utils state=present
+  when: item.value.authentication.file is defined and item.value.authentication.user is defined and item.value.authentication.password is defined
+  tags: [ent,nginx,entnonha]
+
 - name: Create htpasswd if defined
   command: /usr/bin/htpasswd -bc {{ item.value.authentication.file }} {{ item.value.authentication.user }} {{ item.value.authentication.password }}
   when: item.value.authentication.file is defined and item.value.authentication.user is defined and item.value.authentication.password is defined
