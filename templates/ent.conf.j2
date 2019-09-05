@@ -1,11 +1,11 @@
-{% if ent_sites[item].upstreams is defined %}
-{% for upstream in ent_sites[item].upstreams %}
-upstream {{ upstream.name }}.{{ ent_sites[item].upstream_suffix }} {
-{% for node in ent_sites[item].nodes %}
+{% if item.value.upstreams is defined %}
+{% for upstream in item.value.upstreams %}
+upstream {{ upstream.name }}.{{ item.value.upstream_suffix }} {
+{% for node in item.value.nodes %}
   server     {{ node }}:{{ upstream.port }}  fail_timeout=10s;
 {% endfor %}
-{% if ent_sites[item].upstream_options is defined %}
-{% for upstream_option in ent_sites[item].upstream_options %}
+{% if item.value.upstream_options is defined %}
+{% for upstream_option in item.value.upstream_options %}
   {{ upstream_option }}
 {% endfor %}
 {% endif %}
@@ -13,10 +13,10 @@ upstream {{ upstream.name }}.{{ ent_sites[item].upstream_suffix }} {
 {% endfor %}
 {% endif %}
 
-{% set ignore_logs = ent_sites[item].ignore_logs_ips is defined and ent_sites[item].ignore_logs_ips|length > 0 %}
+{% set ignore_logs = item.value.ignore_logs_ips is defined and item.value.ignore_logs_ips|length > 0 %}
 {% if ignore_logs %}
 map $remote_addr $log_ip {
-{% for ip in ent_sites[item].ignore_logs_ips %}
+{% for ip in item.value.ignore_logs_ips %}
   "{{ ip }}" 0;
 {% endfor %}
   default 1;
@@ -25,9 +25,9 @@ map $remote_addr $log_ip {
 
 server {
   listen                *:80;
-  server_name           {{ ent_sites[item].server_name }};
+  server_name           {{ item.value.server_name }};
 
-  client_max_body_size {{ ent_sites[item].client_max_body_size|default('50M') }};
+  client_max_body_size {{ item.value.client_max_body_size|default('50M') }};
 
   gzip_types text/plain text/css application/javascript application/xml application/json text/json text/xml text/javascript/image/svg+xml application/vnd.ms-fontobject application/x-font-ttf font/opentype;
   gzip_proxied any;
@@ -41,11 +41,11 @@ server {
   }
   index  index.html index.htm index.php;
 
-  access_log            /var/log/nginx/{{ ent_sites[item].server_name | replace(' ', '_') }}-80.access.log upstream_time {% if ignore_logs %}if=$log_ip{% endif %};
-  error_log             /var/log/nginx/{{ ent_sites[item].server_name | replace(' ', '_') }}-80.error.log;
+  access_log            /var/log/nginx/{{ item.value.server_name | replace(' ', '_') }}-80.access.log upstream_time {% if ignore_logs %}if=$log_ip{% endif %};
+  error_log             /var/log/nginx/{{ item.value.server_name | replace(' ', '_') }}-80.error.log;
 
   location / {
-    proxy_pass            http://portal.{{ ent_sites[item].upstream_suffix }};
+    proxy_pass            http://portal.{{ item.value.upstream_suffix }};
     proxy_read_timeout    90;
     proxy_connect_timeout 90;
     proxy_redirect        off;
@@ -55,12 +55,12 @@ server {
 }
 server {
   listen       *:443 ssl;
-  server_name  {{ ent_sites[item].server_name }};
+  server_name  {{ item.value.server_name }};
 
   ssl on;
 
-  ssl_certificate           {{ ent_sites[item].ssl_certificate }};
-  ssl_certificate_key       {{ ent_sites[item].ssl_certificate_key }};
+  ssl_certificate           {{ item.value.ssl_certificate }};
+  ssl_certificate_key       {{ item.value.ssl_certificate_key }};
   ssl_session_cache         shared:SSL:10m;
   ssl_session_timeout       5m;
   ssl_protocols             TLSv1 TLSv1.1 TLSv1.2;
@@ -68,36 +68,36 @@ server {
   ssl_prefer_server_ciphers on;
 
 
-  client_max_body_size {{ ent_sites[item].client_max_body_size|default('50M') }};
+  client_max_body_size {{ item.value.client_max_body_size|default('50M') }};
 
   gzip_types text/plain text/css application/javascript application/xml application/json text/json text/xml text/javascript/image/svg+xml application/vnd.ms-fontobject application/x-font-ttf font/opentype;
   gzip_proxied any;
   index  index.html index.htm index.php;
 
-  access_log            /var/log/nginx/{{ ent_sites[item].server_name | replace(' ', '_') }}.access.log upstream_time {% if ent_sites[item].ignore_logs is defined and ent_sites[item].ignore_logs %}if=$log_ip{% endif %};
-  error_log             /var/log/nginx/{{ ent_sites[item].server_name | replace(' ', '_') }}.error.log;
+  access_log            /var/log/nginx/{{ item.value.server_name | replace(' ', '_') }}.access.log upstream_time {% if item.value.ignore_logs is defined and item.value.ignore_logs %}if=$log_ip{% endif %};
+  error_log             /var/log/nginx/{{ item.value.server_name | replace(' ', '_') }}.error.log;
 
   proxy_intercept_errors on;
   error_page 404  /404.html;
   error_page 500 503 504 /50x.html;
   error_page 502 /502.html;
 
-{% if ent_sites[item].options is defined %}
-{% for option in ent_sites[item].options %}
+{% if item.value.options is defined %}
+{% for option in item.value.options %}
   {{ option }}
 {% endfor %}
 {% endif %}
 
-  rewrite ^/cas/logout$ {{ ent_sites[item].logout_cas|default('/timeline/timeline') }} redirect; 
+  rewrite ^/cas/logout$ {{ item.value.logout_cas|default('/timeline/timeline') }} redirect; 
 
-{% if ent_sites[item].document_root is defined %}
+{% if item.value.document_root is defined %}
   location /userbook/avatar/{
     #try thumbnail
     if ($uri ~ "^/userbook/avatar/(.{32})(.{2})(.{2})") {
         set $path "avatars/$3/$2/$arg_thumbnail-$1$2$3";
     }
     # if exists return
-    if (-f "{{ ent_sites[item].document_root }}/$path") {
+    if (-f "{{ item.value.document_root }}/$path") {
         rewrite .* "/$path" last;
     }
     #if not exists try default size
@@ -105,7 +105,7 @@ server {
         set $path "avatars/$3/$2/$1$2$3";
     }
     # if not exists try default avatar
-    if (!-f "{{ ent_sites[item].document_root }}/$path"){
+    if (!-f "{{ item.value.document_root }}/$path"){
         set $path "avatars/ar/at/no-avatar.png";
     }
     # return
@@ -113,22 +113,22 @@ server {
   }
 {% endif %}
 
-{% if ent_sites[item].authentication.file is defined %}
+{% if item.value.authentication.file is defined %}
   location = /auth/login {
     auth_basic                  "Restricted";
-    auth_basic_user_file        {{ ent_sites[item].authentication.file }};
+    auth_basic_user_file        {{ item.value.authentication.file }};
 
-    proxy_pass            http://auth.{{ ent_sites[item].upstream_suffix }};
+    proxy_pass            http://auth.{{ item.value.upstream_suffix }};
     proxy_redirect        off;
     proxy_set_header      Host $host;
     proxy_set_header      X-Real-IP $remote_addr;
     proxy_set_header      X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header      X-Forwarded-Proto $scheme;
-    proxy_read_timeout    {{ ent_sites[item].proxy_read_timeout|default('90') }};
-    proxy_connect_timeout {{ ent_sites[item].proxy_read_timeout|default('90') }};
-{% if ent_sites[item].cors is defined %}
+    proxy_read_timeout    {{ item.value.proxy_read_timeout|default('90') }};
+    proxy_connect_timeout {{ item.value.proxy_read_timeout|default('90') }};
+{% if item.value.cors is defined %}
     # CORS configuration
-    add_header 'Access-Control-Allow-Origin' '{{ent_sites[item].cors}}';
+    add_header 'Access-Control-Allow-Origin' '{{item.value.cors}}';
     add_header 'Access-Control-Allow-Methods' 'POST';
     add_header 'Access-Control-Allow-Methods' 'PUT';
     add_header 'Access-Control-Allow-Headers' 'authorization';
@@ -142,7 +142,7 @@ server {
 {% endif %}
 
   location /userbook {
-    proxy_pass            http://directory.{{ ent_sites[item].upstream_suffix }};
+    proxy_pass            http://directory.{{ item.value.upstream_suffix }};
     proxy_read_timeout    90;
     proxy_connect_timeout 90;
     proxy_redirect        off;
@@ -151,9 +151,9 @@ server {
     proxy_set_header      X-Real-IP $remote_addr;
     proxy_set_header      X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header      X-Forwarded-Proto $scheme;
-{% if ent_sites[item].cors is defined %}
+{% if item.value.cors is defined %}
     # CORS configuration
-    add_header 'Access-Control-Allow-Origin' '{{ent_sites[item].cors}}';
+    add_header 'Access-Control-Allow-Origin' '{{item.value.cors}}';
     add_header 'Access-Control-Allow-Methods' 'POST';
     add_header 'Access-Control-Allow-Methods' 'PUT';
     add_header 'Access-Control-Allow-Headers' 'authorization';
@@ -166,8 +166,8 @@ server {
 
   }
 
-{% if ent_sites[item].upstreams is defined %}
-{% for upstream in ent_sites[item].upstreams %}
+{% if item.value.upstreams is defined %}
+{% for upstream in item.value.upstreams %}
 {% if upstream.name != 'portal' %}
 {% if upstream.location is defined %}
   location /{{ upstream.location }} {
@@ -177,7 +177,7 @@ server {
 {% else %}
   location / {
 {% endif %}
-    proxy_pass            http://{{ upstream.name }}.{{ ent_sites[item].upstream_suffix }};
+    proxy_pass            http://{{ upstream.name }}.{{ item.value.upstream_suffix }};
     proxy_redirect        off;
     proxy_set_header      Host $host;
     proxy_set_header      X-Real-IP $remote_addr;
@@ -190,11 +190,11 @@ server {
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection "upgrade";
 {% else %}
-    proxy_read_timeout    {{ ent_sites[item].proxy_read_timeout|default('90') }};
+    proxy_read_timeout    {{ item.value.proxy_read_timeout|default('90') }};
 {% if upstream.name != 'archive' %}
-    proxy_connect_timeout {{ ent_sites[item].proxy_connect_timeout|default('90') }};
+    proxy_connect_timeout {{ item.value.proxy_connect_timeout|default('90') }};
 {% else %}
-	proxy_connect_timeout {{ ent_sites[item].proxy_connect_timeout|default('900') }};
+	proxy_connect_timeout {{ item.value.proxy_connect_timeout|default('900') }};
 {% endif %}
 {% endif %}
 {% if upstream.options is defined %}
@@ -203,9 +203,9 @@ server {
     {{ option }};
 {% endfor %}
 {% endif %}
-{% if ent_sites[item].cors is defined %}
+{% if item.value.cors is defined %}
     # CORS configuration
-    add_header 'Access-Control-Allow-Origin' '{{ent_sites[item].cors}}';
+    add_header 'Access-Control-Allow-Origin' '{{item.value.cors}}';
     add_header 'Access-Control-Allow-Methods' 'POST';
     add_header 'Access-Control-Allow-Methods' 'PUT';
     add_header 'Access-Control-Allow-Headers' 'authorization';
@@ -220,13 +220,13 @@ server {
 {% endfor %}
 {% endif %}
 
-{% if ent_sites[item].etherpad_host is defined %}
+{% if item.value.etherpad_host is defined %}
   location = /pad                { deny all; }
   location = /pad/                { deny all; }
 
   location /pad {
     rewrite ^/pad(/.*)$ $1 break;
-    proxy_pass        http://{{ ent_sites[item].etherpad_host }}:8102;
+    proxy_pass        http://{{ item.value.etherpad_host }}:8102;
     proxy_buffering   off;
     proxy_set_header  Host             $host;
     proxy_set_header  X-Real-IP        $remote_addr;
@@ -236,9 +236,9 @@ server {
     proxy_http_version 1.1;
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection "upgrade";
-{% if ent_sites[item].cors is defined %}
+{% if item.value.cors is defined %}
     # CORS configuration
-    add_header 'Access-Control-Allow-Origin' '{{ent_sites[item].cors}}';
+    add_header 'Access-Control-Allow-Origin' '{{item.value.cors}}';
     add_header 'Access-Control-Allow-Methods' 'POST';
     add_header 'Access-Control-Allow-Methods' 'PUT';
     add_header 'Access-Control-Allow-Headers' 'authorization';
@@ -252,9 +252,9 @@ server {
   }
 {% endif %}
 
-{% if ent_sites[item].gomail_host is defined %}
+{% if item.value.gomail_host is defined %}
   location /pixel {
-    proxy_pass        http://{{ ent_sites[item].gomail_host }}:7500;
+    proxy_pass        http://{{ item.value.gomail_host }}:7500;
     proxy_buffering   off;
     proxy_set_header  Host             $host;
     proxy_set_header  X-Real-IP        $remote_addr;
@@ -263,9 +263,9 @@ server {
   }
 {% endif %}
 
-{% if ent_sites[item].document_root is defined %}
+{% if item.value.document_root is defined %}
   location /avatars/ {
-    root {{ ent_sites[item].document_root }};
+    root {{ item.value.document_root }};
     autoindex off;
     index index.html index.htm index.php;
     add_header Cache-Control must-revalidate;
@@ -275,39 +275,39 @@ server {
   }
 {% endif %}
 
-{% if ent_sites[item].serve_statics %}
+{% if item.value.serve_statics %}
   location /404.html {
-    root {{ ent_sites[item].statics_path }}/errors;
+    root {{ item.value.statics_path }}/errors;
   }
   location /50x.html {
-    root {{ ent_sites[item].statics_path }}/errors;
+    root {{ item.value.statics_path }}/errors;
   }
   location /502.html {
-    root {{ ent_sites[item].statics_path }}/errors;
+    root {{ item.value.statics_path }}/errors;
   }
   location /help-1d/ {
-    root      {{ ent_sites[item].statics_path }};
+    root      {{ item.value.statics_path }};
     autoindex off;
     index     index.html index.htm index.php;
   }
   location /help-2d/ {
-    root      {{ ent_sites[item].statics_path }};
+    root      {{ item.value.statics_path }};
     autoindex off;
     index     index.html index.htm index.php;
   }
 
 
-{% if ent_sites[item].upstreams is defined %}
-{% for upstream in ent_sites[item].upstreams %}
+{% if item.value.upstreams is defined %}
+{% for upstream in item.value.upstreams %}
 {% if upstream != 'portal' %}
 {% if upstream.location is defined %}
   location /{{ upstream.location }}/public/ {
 {% else %}
   location /{{ upstream.name }}/public/ {
 {% endif %}
-    {% if ent_sites[item].cors is defined and ent_sites[item].cors and upstream.cors is defined  %}
+    {% if item.value.cors is defined and item.value.cors and upstream.cors is defined  %}
     if ($request_method = 'OPTIONS') {
-      add_header 'Access-Control-Allow-Origin' '{{ent_sites[item].cors}}';
+      add_header 'Access-Control-Allow-Origin' '{{item.value.cors}}';
       add_header 'Access-Control-Allow-Methods' 'GET, OPTIONS';
       add_header 'Access-Control-Max-Age' 86400;
       add_header 'Content-Type' 'text/plain charset=UTF-8';
@@ -315,17 +315,17 @@ server {
       return 204;
     }
     if ($request_method = 'GET') {
-      add_header 'Access-Control-Allow-Origin' '{{ent_sites[item].cors}}';
+      add_header 'Access-Control-Allow-Origin' '{{item.value.cors}}';
       add_header 'Access-Control-Allow-Methods' 'GET, OPTIONS';
     }
 
 
     {% endif %}
 
-    root {{ ent_sites[item].statics_path }};
+    root {{ item.value.statics_path }};
 {% else %}
   location /public/ {
-    root {{ ent_sites[item].statics_path }}/portal/;
+    root {{ item.value.statics_path }}/portal/;
 {% endif %}
     autoindex off;
     index index.html index.htm index.php;

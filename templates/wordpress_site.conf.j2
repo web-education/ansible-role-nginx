@@ -1,7 +1,7 @@
-{% set ignore_logs = wordpress_sites[item].ignore_logs_ips is defined and wordpress_sites[item].ignore_logs_ips|length > 0 %}
+{% set ignore_logs = item.value.ignore_logs_ips is defined and item.value.ignore_logs_ips|length > 0 %}
 {% if ignore_logs %}
 map $remote_addr $log_ip {
-{% for ip in wordpress_sites[item].ignore_logs_ips %}
+{% for ip in item.value.ignore_logs_ips %}
   "{{ ip }}" 0;
 {% endfor %}
   default 1;
@@ -10,21 +10,21 @@ map $remote_addr $log_ip {
 
 server {
   listen                *:80;
-  server_name           {% if wordpress_sites[item].server_alias is defined %}{{ wordpress_sites[item].server_alias }}{% else %}{{ wordpress_sites[item].server_name }}{% endif %};
+  server_name           {% if item.value.server_alias is defined %}{{ item.value.server_alias }}{% else %}{{ item.value.server_name }}{% endif %};
 
-  rewrite ^(.*) https://{{ wordpress_sites[item].server_name }}$1 redirect;
+  rewrite ^(.*) https://{{ item.value.server_name }}$1 redirect;
 
-  access_log            /var/log/nginx/{{ wordpress_sites[item].server_name | replace(' ', '_') }}-80.access.log upstream_time {% if ignore_logs %}if=$log_ip{% endif %};
-  error_log             /var/log/nginx/{{ wordpress_sites[item].server_name | replace(' ', '_') }}-80.error.log;
+  access_log            /var/log/nginx/{{ item.value.server_name | replace(' ', '_') }}-80.access.log upstream_time {% if ignore_logs %}if=$log_ip{% endif %};
+  error_log             /var/log/nginx/{{ item.value.server_name | replace(' ', '_') }}-80.error.log;
 }
 server {
   listen       *:443 ssl;
-  server_name  {{ wordpress_sites[item].server_name }};
+  server_name  {{ item.value.server_name }};
 
   ssl on;
 
-  ssl_certificate           {{ wordpress_sites[item].ssl_certificate }};
-  ssl_certificate_key       {{ wordpress_sites[item].ssl_certificate_key }};
+  ssl_certificate           {{ item.value.ssl_certificate }};
+  ssl_certificate_key       {{ item.value.ssl_certificate_key }};
   ssl_session_cache         shared:SSL:10m;
   ssl_session_timeout       5m;
   ssl_protocols             TLSv1 TLSv1.1 TLSv1.2;
@@ -38,7 +38,7 @@ server {
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header X-Forwarded-Proto $scheme;
     proxy_pass_header Set-Cookie;
-    proxy_pass http://{{ wordpress_sites[item].upstream_ip }}:{{ wordpress_sites[item].upstream_port }};
+    proxy_pass http://{{ item.value.upstream_ip }}:{{ item.value.upstream_port }};
   }
 
   location /wp-admin {
@@ -48,7 +48,7 @@ server {
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header X-Forwarded-Proto $scheme;
     proxy_pass_header Set-Cookie;
-    proxy_pass http://{{ wordpress_sites[item].upstream_ip }}:{{ wordpress_sites[item].upstream_port }};
+    proxy_pass http://{{ item.value.upstream_ip }}:{{ item.value.upstream_port }};
   }
 
   location ~ wp-login\.php {
@@ -58,7 +58,7 @@ server {
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header X-Forwarded-Proto $scheme;
     proxy_pass_header Set-Cookie;
-    proxy_pass http://{{ wordpress_sites[item].upstream_ip }}:{{ wordpress_sites[item].upstream_port }};
+    proxy_pass http://{{ item.value.upstream_ip }}:{{ item.value.upstream_port }};
   }
 
   location ~ /\.ht {
