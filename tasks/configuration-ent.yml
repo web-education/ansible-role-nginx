@@ -6,8 +6,8 @@
   tags: [ent,nginx,entnonha]
 
 - name: Create htpasswd if defined
-  htpasswd: path={{ item.value.authentication.file }} name={{ item.value.authentication.used }} password='{{ item.value.authentication.password }}'
-  when: item.value.authentication.file is defined or item.value.authentication.used is defined or item.value.authentication.password is defined
+  command: /usr/bin/htpasswd -bc {{ item.value.authentication.file }} {{ item.value.authentication.used }} {{ item.value.authentication.password }}
+  when: item.value.authentication.file is defined and item.value.authentication.user is defined and item.value.authentication.password is defined
   tags: [ent,nginx,entnonha]
 
 - name: Create links for ENT sites
