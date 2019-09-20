@@ -275,6 +275,18 @@ server {
   }
 {% endif %}
 
+{%  if item.value.serve_assets %}
+  location /assets/ {
+    root {{ item.value.assets_path }};
+    autoindex off;
+    index index.html index.htm index.php;
+    add_header Cache-Control must-revalidate;
+    etag on;
+    if_modified_since exact;
+    expires epoch;
+  }
+{% endif %}
+
 {% if item.value.serve_statics %}
   location /404.html {
     root {{ item.value.statics_path }}/errors;

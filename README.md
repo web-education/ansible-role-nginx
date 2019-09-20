@@ -295,6 +295,8 @@ ent_sites:
    upstream_suffix: 'vertx.lan'
    serve_statics: true
    statics_path: '/var/www/web-education/static'
+   serve_assets: true
+   assets_path: '/var/www/web-education/assets'
    options:
      - 'rewrite ^/forum(.*) https://cool-ent.opendigitaleducation.com/forum$1 permanent'
      - 'rewrite ^/pages(.*) https://cool-ent.opendigitaleducation.com/pages$1 permanent'
