@@ -277,7 +277,7 @@ server {
 
 {%  if item.value.serve_assets %}
   location /assets/ {
-    root {{ item.value.assets_path }};
+    root {{ item.value.document_root }};
     autoindex off;
     index index.html index.htm index.php;
     add_header Cache-Control must-revalidate;
