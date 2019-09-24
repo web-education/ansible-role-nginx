@@ -12,10 +12,13 @@
 - include: configuration.yml
 - include: configuration-ent.yml
   with_dict: '{{ ent_sites }}'
+  when: ent_sites is defined
 - include: configuration-wordpress.yml
   with_dict: '{{ wordpress_sites }}'
+  when: wordpress_sites is defined
 - include: configuration-spip.yml
   with_dict: '{{ spip_sites }}'
+  when: spip_sites is defined
 - include: logrotate.yml
   when: nginx_logrotate
   tags: logrotate

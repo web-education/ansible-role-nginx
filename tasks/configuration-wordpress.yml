@@ -1,12 +1,12 @@
 ---
 - name: Create the configurations for sites
   template: src=wordpress_site.conf.j2 dest={{nginx_conf_dir}}/sites-available/{{ item.key }}.conf
-  notify:
-   - reload nginx
+  when: wordpress_sites is defined
   tags: [wordpress,configuration,nginx]
 
 - name: Create links for sites-enabled
   file: state=link src={{nginx_conf_dir}}/sites-available/{{ item.key }}.conf dest={{nginx_conf_dir}}/sites-enabled/{{ item.key }}.conf
+  when: wordpress_sites is defined
   notify:
    - reload nginx
   tags: [wordpress,configuration,nginx]
