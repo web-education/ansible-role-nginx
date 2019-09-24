@@ -181,6 +181,8 @@ default_apps:
     port: '8168'
   - name: 'presences'
     port: '8062'
+  - name: 'incidents'
+    port: '8063'
   - name: 'schooltoring'
     port: '8141'
   - name: 'mediacentre'
