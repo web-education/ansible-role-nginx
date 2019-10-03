@@ -26,13 +26,13 @@
   when: nginx_official_repo_mainline
 
 - name: Create the configurations for nginx sites
-  template: src=nginx_site.conf.j2 dest={{nginx_conf_dir}}/sites-available/{{ item.key }}.conf
+  template: src=nginx_site.conf.j2 dest={{nginx_conf_dir}}/sites-available/{{ item }}.conf
   with_items: "{{ nginx_sites.keys() | difference(nginx_remove_sites) }}"
   when: nginx_sites is defined
   tags: [configuration,nginx]
 
 - name: Create links for sites-enabled
-  file: state=link src={{nginx_conf_dir}}/sites-available/{{ item.key }}.conf dest={{nginx_conf_dir}}/sites-enabled/{{ item.key }}.conf
+  file: state=link src={{nginx_conf_dir}}/sites-available/{{ item }}.conf dest={{nginx_conf_dir}}/sites-enabled/{{ item }}.conf
   with_items: "{{ nginx_sites.keys() | difference(nginx_remove_sites) }}"
   when: nginx_sites is defined
   notify:
