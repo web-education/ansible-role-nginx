@@ -72,4 +72,22 @@ server {
   location ~ xmlrpc\.php {
     deny all;
   }
+  
+  location ~* ^/wp-content/plugins/.+\.(txt|log|md)$ {
+    deny all;
+  }
+
+  location ^~ /wp-admin/install.php {
+    deny all;
+  }
+	 
+  location ^~ /wp-admin/upgrade.php {
+    deny all;
+  }
+
+  location ~* ^/(license.txt|wp-includes/(.*)/.+\.(js|css)|wp-admin/(.*)/.+\.(js|css))$ {
+    sub_filter_types text/css text/javascript text/plain;
+    sub_filter_once on;
+    sub_filter ';' '; /* $msec */ ';
+  }
 }
