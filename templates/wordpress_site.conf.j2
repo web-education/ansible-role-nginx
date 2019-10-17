@@ -84,10 +84,5 @@ server {
   location ^~ /wp-admin/upgrade.php {
     deny all;
   }
-
-  location ~* ^/(license.txt|wp-includes/(.*)/.+\.(js|css)|wp-admin/(.*)/.+\.(js|css))$ {
-    sub_filter_types text/css text/javascript text/plain;
-    sub_filter_once on;
-    sub_filter ';' '; /* $msec */ ';
-  }
+  
 }
