@@ -84,5 +84,9 @@ server {
   location ^~ /wp-admin/upgrade.php {
     deny all;
   }
+
+  location ~* .*readme\.html {
+    deny all;
+  }
   
 }
