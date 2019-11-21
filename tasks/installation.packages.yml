@@ -40,3 +40,8 @@
   with_items: "{{ nginx_suse_pkg }}"
   when: ansible_os_family == "Suse"
   tags: [packages,nginx]
+
+- name: Start the nginx service
+  service: name={{ nginx_service_name }} state=started enabled=yes
+  when: nginx_installation_type in nginx_installation_types_using_service and nginx_daemon_mode == "on"
+  tags: [service,nginx]
