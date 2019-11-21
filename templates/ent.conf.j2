@@ -276,7 +276,7 @@ server {
   }
 {% endif %}
 
-{%  if item.value.serve_assets %}
+{%  if item.value.serve_assets is defined and item.value.serve_assets %}
   location /assets/ {
     root {{ item.value.document_root }};
     autoindex off;
