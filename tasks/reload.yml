@@ -1,0 +1,10 @@
+---
+- name: check nginx configuration
+  shell: "{{ nginx_binary_name }} -t"
+  register: nginx_check
+  tags: [ent,nginx,sites,spip,wordpress]
+
+- name: reload nginx - after config check
+  service: name=nginx state=reloaded
+  when: "nginx_check.rc == 0"
+  tags: [ent,nginx,sites,spip,wordpress]
