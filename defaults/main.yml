@@ -82,6 +82,12 @@ default_apps:
     port: 8009
   - name: 'workspace'
     port: 8011
+    proxy_read_timeout: 180
+    proxy_connect_timeout: 180
+    options:
+      - 'client_max_body_size 2048M'
+      - 'proxy_max_temp_file_size 0'
+      - 'proxy_buffering off'
   - name: 'appregistry'
     port: 8012
   - name: 'communication'
@@ -98,6 +104,10 @@ default_apps:
     port: 8023
   - name: 'archive'
     port: 8004
+    proxy_read_timeout: 900
+    proxy_connect_timeout: 900
+    options:
+      - 'client_max_body_size 2048M'
   - name: 'forum'
     port: 8024
   - name: 'pages'
@@ -141,7 +151,7 @@ default_apps:
   - name: 'sharebigfiles'
     port: 8052
     options:
-      - 'client_max_body_size 1024M'
+      - 'client_max_body_size 2048M'
   - name: 'exercizer'
     port: 8105
   - name: 'calendar'
@@ -201,6 +211,10 @@ default_apps:
     port: '8059'
   - name: 'crm'
     port: '8064'
+  - name: 'pmb'
+    port: '8130'
+  - name: 'webconference'
+    port: '8088'
 default_apps_2d:
   - name: 'portal'
     port: 8017
@@ -214,6 +228,12 @@ default_apps_2d:
     port: 8009
   - name: 'workspace'
     port: 8011
+    proxy_read_timeout: 180
+    proxy_connect_timeout: 180
+    options:
+      - 'client_max_body_size 2048M'
+      - 'proxy_max_temp_file_size 0'
+      - 'proxy_buffering off'
   - name: 'appregistry'
     port: 8012
   - name: 'communication'
@@ -231,6 +251,10 @@ default_apps_2d:
     port: 8023
   - name: 'archive'
     port: 8004
+    proxy_read_timeout: 900
+    proxy_connect_timeout: 900
+    options:
+      - 'client_max_body_size 2048M'
   - name: 'forum'
     port: 8024
   - name: 'pages'
@@ -275,7 +299,7 @@ default_apps_2d:
   - name: 'sharebigfiles'
     port: 8052
     options:
-      - 'client_max_body_size 1024M'
+      - 'client_max_body_size 2048M'
   - name: 'exercizer'
     port: 8105
   - name: 'calendar'
@@ -323,6 +347,10 @@ default_apps_2d:
     port: '8059'
   - name: 'crm'
     port: '8064'
+  - name: 'pmb'
+    port: '8130'
+  - name: 'webconference'
+    port: '8088'
 default_apps_1d:
   - name: 'portal'
     port: 8017
@@ -336,6 +364,12 @@ default_apps_1d:
     port: 8009
   - name: 'workspace'
     port: 8011
+    proxy_read_timeout: 180
+    proxy_connect_timeout: 180
+    options:
+      - 'client_max_body_size 2048M'
+      - 'proxy_max_temp_file_size 0'
+      - 'proxy_buffering off'
   - name: 'appregistry'
     port: 8012
   - name: 'communication'
@@ -352,6 +386,10 @@ default_apps_1d:
     port: 8023
   - name: 'archive'
     port: 8004
+    proxy_read_timeout: 900
+    proxy_connect_timeout: 900
+    options:
+      - 'client_max_body_size 2048M'
   - name: 'wiki'
     port: 8030
   - name: 'support'
@@ -418,3 +456,7 @@ default_apps_1d:
     port: '8059'
   - name: 'crm'
     port: '8064'
+  - name: 'pmb'
+    port: '8130'
+  - name: 'webconference'
+    port: '8088'
