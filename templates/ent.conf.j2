@@ -190,13 +190,8 @@ server {
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection "upgrade";
 {% else %}
-{% if upstream.name != 'archive' %}
-    proxy_read_timeout    {{ item.value.proxy_read_timeout|default('90') }};
-    proxy_connect_timeout {{ item.value.proxy_connect_timeout|default('90') }};
-{% else %}
-    proxy_read_timeout    {{ item.value.proxy_read_timeout|default('900') }};
-	proxy_connect_timeout {{ item.value.proxy_connect_timeout|default('900') }};
-{% endif %}
+    proxy_read_timeout    {{ upstream.proxy_read_timeout|default('90') }};
+	proxy_connect_timeout {{ upstream.proxy_connect_timeout|default('90') }};
 {% endif %}
 {% if upstream.options is defined %}
     # extra options
