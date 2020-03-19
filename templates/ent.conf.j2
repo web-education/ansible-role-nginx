@@ -1,9 +1,13 @@
 {% if item.value.upstreams is defined %}
 {% for upstream in item.value.upstreams %}
 upstream {{ upstream.name }}.{{ item.value.upstream_suffix }} {
-{% for node in item.value.nodes %}
-  server     {{ node }}:{{ upstream.port }}  fail_timeout=10s;
-{% endfor %}
+{% if upstream.name == 'video' and item.value.video_host is defined %}
+  server     {{ item.value.video_host }}:{{ upstream.port }} max_fails=3 fail_timeout=5s;
+{% else %}
+  {% for node in item.value.nodes %}
+  server     {{ node }}:{{ upstream.port }}  max_fails=3 fail_timeout=5s;
+  {% endfor %}
+{% endif %}
 {% if item.value.upstream_options is defined %}
 {% for upstream_option in item.value.upstream_options %}
   {{ upstream_option }}
@@ -33,8 +37,9 @@ server {
   gzip_proxied any;
   proxy_intercept_errors on;
   error_page 404  /404.html;
-  error_page 500 503 504 /50x.html;
+  error_page 500 504 /50x.html;
   error_page 502 /502.html;
+  error_page 503 /503-covid.html;
 
   if ($ssl_protocol = "") {
        return 301 https://$host$request_uri;
@@ -79,8 +84,9 @@ server {
 
   proxy_intercept_errors on;
   error_page 404  /404.html;
-  error_page 500 503 504 /50x.html;
+  error_page 500 504 /50x.html;
   error_page 502 /502.html;
+  error_page 503 /503-covid.html;
 
 {% if item.value.options is defined %}
 {% for option in item.value.options %}
@@ -113,10 +119,10 @@ server {
   }
 {% endif %}
 
-{% if item.value.authentication.file is defined %}
+{% if item.value.auth_basic_file is defined %}
   location = /auth/login {
     auth_basic                  "Restricted";
-    auth_basic_user_file        {{ item.value.authentication.file }};
+    auth_basic_user_file        {{ item.value.auth_basic_file }};
 
     proxy_pass            http://auth.{{ item.value.upstream_suffix }};
     proxy_redirect        off;
@@ -291,6 +297,9 @@ server {
     root {{ item.value.statics_path }}/errors;
   }
   location /502.html {
+    root {{ item.value.statics_path }}/errors;
+  }
+  location /503-covid.html {
     root {{ item.value.statics_path }}/errors;
   }
   location /help-1d/ {
