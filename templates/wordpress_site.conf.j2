@@ -35,6 +35,9 @@ server {
     return 403;
   }
 
+  access_log            /var/log/nginx/{{ item.value.server_name | replace(' ', '_') }}.access.log upstream_time {% if ignore_logs %}if=$log_ip{% endif %};
+    error_log             /var/log/nginx/{{ item.value.server_name | replace(' ', '_') }}.error.log;
+
   location / {
     proxy_redirect off;
     proxy_set_header Host $host;
@@ -65,7 +68,7 @@ server {
     proxy_pass http://{{ item.value.upstream_ip }}:{{ item.value.upstream_port }};
   }
 
-  location ~ /\.ht {
+  location ~ /\.htaccess {
     deny all;
   }
 
