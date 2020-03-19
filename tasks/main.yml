@@ -9,6 +9,7 @@
 - include: remove-extras.yml
   when: keep_only_specified
 - include: remove-unwanted.yml
+- include: auth_basic.yml
 - include: configuration.yml
 - include: configuration-ent.yml
   with_dict: '{{ ent_sites }}'
