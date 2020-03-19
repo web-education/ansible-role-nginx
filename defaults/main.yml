@@ -215,6 +215,10 @@ default_apps:
     port: '8130'
   - name: 'webconference'
     port: '8088'
+  - name: 'massmailing'
+    port: '8066'
+  - name: 'video'
+    port: '8058'
 default_apps_2d:
   - name: 'portal'
     port: 8017
@@ -351,6 +355,10 @@ default_apps_2d:
     port: '8130'
   - name: 'webconference'
     port: '8088'
+  - name: 'massmailing'
+    port: '8066'
+  - name: 'video'
+    port: '8058'
 default_apps_1d:
   - name: 'portal'
     port: 8017
@@ -460,3 +468,7 @@ default_apps_1d:
     port: '8130'
   - name: 'webconference'
     port: '8088'
+  - name: 'massmailing'
+    port: '8066'
+  - name: 'video'
+    port: '8058'
