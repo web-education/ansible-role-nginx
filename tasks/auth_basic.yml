@@ -1,0 +1,11 @@
+---
+- name: Install htpasswd package
+  apt: name=apache2-utils state=present
+  when: nginx_auth_basic is defined
+  tags: [ent,sites,wordpress,spip,nginx]
+
+- name: Create htpasswd if defined
+  command: /usr/bin/htpasswd -bc {{ item.file }} {{ item.user }} {{ item.password }}
+  when: nginx_auth_basic is defined
+  with_items: '{{ nginx_auth_basic }}'
+  tags: [ent,sites,wordpress,spip,nginx]
