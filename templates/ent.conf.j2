@@ -8,7 +8,7 @@ upstream {{ upstream.name }}.{{ item.value.upstream_suffix }} {
 {% if node.hz %}
   server     {{ node.name }}:{{ upstream.port }}  max_fails=3 fail_timeout=5s;
 {% else %}
- {% if upstream.name != 'directory' %}
+ {% if upstream.name != 'directory' and upstream.name != 'workspace' %}
   server     {{ node.name }}:{{ upstream.port }}  max_fails=3 fail_timeout=5s;
  {% endif %}
 {% endif %}
