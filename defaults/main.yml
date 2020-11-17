@@ -74,8 +74,20 @@ default_apps:
     port: 8017
   - name: 'infra'
     port: 8001
+  - name: 'directory-pronote'
+    port: 8003
+    proxy_read_timeout: 600
+    proxy_connect_timeout: 600
+    location: 'directory/timetable/feeder/pronote'
+  - name: 'directory-import'
+    port: 8003
+    proxy_read_timeout: 600
+    proxy_connect_timeout: 600
+    location: 'directory/timetable/import'
   - name: 'directory'
     port: 8003
+    proxy_read_timeout: 600
+    proxy_connect_timeout: 600
   - name: 'history'
     port: 8006
   - name: 'auth'
@@ -107,7 +119,7 @@ default_apps:
     proxy_read_timeout: 900
     proxy_connect_timeout: 900
     options:
-      - 'client_max_body_size 2048M'
+      - 'client_max_body_size 5048M'
   - name: 'forum'
     port: 8024
   - name: 'pages'
@@ -195,6 +207,8 @@ default_apps:
     port: '8062'
   - name: 'incidents'
     port: '8063'
+  - name: 'statistics-presences'
+    port: '8065'
   - name: 'schooltoring'
     port: '8141'
   - name: 'mediacentre'
@@ -221,13 +235,29 @@ default_apps:
     port: '8066'
   - name: 'video'
     port: '8058'
+  - name: 'homework-assistance'
+    port: '8330'
+  - name: 'sqool'
+    port: '8057'
 default_apps_2d:
   - name: 'portal'
     port: 8017
   - name: 'infra'
     port: 8001
+  - name: 'directory-pronote'
+    port: 8003
+    proxy_read_timeout: 600
+    proxy_connect_timeout: 600
+    location: 'directory/timetable/feeder/pronote'
+  - name: 'directory-import'
+    port: 8003
+    proxy_read_timeout: 600
+    proxy_connect_timeout: 600
+    location: 'directory/timetable/import'
   - name: 'directory'
     port: 8003
+    proxy_read_timeout: 600
+    proxy_connect_timeout: 600
   - name: 'history'
     port: 8006
   - name: 'auth'
@@ -260,7 +290,7 @@ default_apps_2d:
     proxy_read_timeout: 900
     proxy_connect_timeout: 900
     options:
-      - 'client_max_body_size 2048M'
+      - 'client_max_body_size 5048M'
   - name: 'forum'
     port: 8024
   - name: 'pages'
@@ -363,13 +393,31 @@ default_apps_2d:
     port: '8066'
   - name: 'video'
     port: '8058'
+  - name: 'homework-assistance'
+    port: '8330'
+  - name: 'sqool'
+    port: '8057'
+  - name: 'statistics-presences'
+    port: '8065'
 default_apps_1d:
   - name: 'portal'
     port: 8017
   - name: 'infra'
     port: 8001
+  - name: 'directory-pronote'
+    port: 8003
+    proxy_read_timeout: 600
+    proxy_connect_timeout: 600
+    location: 'directory/timetable/feeder/pronote'
+  - name: 'directory-import'
+    port: 8003
+    proxy_read_timeout: 600
+    proxy_connect_timeout: 600
+    location: 'directory/timetable/import'
   - name: 'directory'
     port: 8003
+    proxy_read_timeout: 600
+    proxy_connect_timeout: 600
   - name: 'history'
     port: 8006
   - name: 'auth'
@@ -401,7 +449,7 @@ default_apps_1d:
     proxy_read_timeout: 900
     proxy_connect_timeout: 900
     options:
-      - 'client_max_body_size 2048M'
+      - 'client_max_body_size 5048M'
   - name: 'wiki'
     port: 8030
   - name: 'support'
@@ -476,3 +524,9 @@ default_apps_1d:
     port: '8066'
   - name: 'video'
     port: '8058'
+  - name: 'homework-assistance'
+    port: '8330'
+  - name: 'sqool'
+    port: '8057'
+  - name: 'statistics-presences'
+    port: '8065'

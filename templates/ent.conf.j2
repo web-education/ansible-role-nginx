@@ -2,7 +2,29 @@
 {% for upstream in item.value.upstreams %}
 upstream {{ upstream.name }}.{{ item.value.upstream_suffix }} {
 {% if upstream.name == 'video' and item.value.video_host is defined %}
-  server     {{ item.value.video_host }}:{{ upstream.port }} max_fails=3 fail_timeout=5s;
+  {% for video_node in item.value.video_host %}
+server     {{ video_node }}:{{ upstream.port }} max_fails=3 fail_timeout=5s;
+  {% endfor %}
+{% elif upstream.name == 'auth' and item.value.auth_nodes is defined %}
+ {% for auth_node in item.value.auth_nodes %}
+server     {{ auth_node }}:{{ upstream.port }}  max_fails=3 fail_timeout=5s;
+ {% endfor %}
+{% elif (upstream.name == 'zimbra' or upstream.name == 'apizimbra') and item.value.zimbra_nodes is defined %}
+ {% for zimbra_node in item.value.zimbra_nodes %}
+server     {{ zimbra_node }}:{{ upstream.port }}  max_fails=3 fail_timeout=5s;
+ {% endfor %}
+{% elif upstream.name == 'presences' and item.value.presences_nodes is defined %}
+ {% for presences_node in item.value.presences_nodes %}
+server     {{ presences_node }}:{{ upstream.port }}  max_fails=3 fail_timeout=5s;
+ {% endfor %}
+{% elif upstream.name == 'archive' and item.value.archive_nodes is defined %}
+ {% for archive_node in item.value.archive_nodes %}
+server     {{ archive_node }}:{{ upstream.port }}  max_fails=3 fail_timeout=5s;
+ {% endfor %}
+{% elif upstream.name == 'directory-pronote' and item.value.directoryPronote_host is defined %}
+server     {{ item.value.directoryPronote_host }}:{{ upstream.port }}  max_fails=3 fail_timeout=5s;
+{% elif upstream.name == 'directory-import' and item.value.directoryImport_host is defined %}
+server     {{ item.value.directoryImport_host }}:{{ upstream.port }}  max_fails=3 fail_timeout=5s;
 {% else %}
   {% for node in item.value.nodes %}
 {% if node.hz %}
@@ -79,16 +101,20 @@ server {
   expires $expires;
 {% endif %}
 
-  ssl on;
-
   ssl_certificate           {{ item.value.ssl_certificate }};
   ssl_certificate_key       {{ item.value.ssl_certificate_key }};
   ssl_session_cache         shared:SSL:10m;
   ssl_session_timeout       5m;
-  ssl_protocols             TLSv1 TLSv1.1 TLSv1.2;
+  ssl_protocols             TLSv1.2 TLSv1.3;
   ssl_ciphers               ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-DSS-AES128-GCM-SHA256:kEDH+AESGCM:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA:AES256-SHA:AES:CAMELLIA:DES-CBC3-SHA:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!aECDH:!EDH-DSS-DES-CBC3-SHA:!EDH-RSA-DES-CBC3-SHA:!KRB5-DES-CBC3-SHA;
   ssl_prefer_server_ciphers on;
 
+  add_header Strict-Transport-Security "max-age=31536000";
+#  add_header X-Frame-Options "SAMEORIGIN";
+  add_header X-Content-Type-Options "nosniff";
+  add_header X-XSS-Protection "1; mode=block";
+  add_header Referrer-Policy "strict-origin-when-cross-origin";
+  add_header Feature-Policy "accelerometer none;ambient-light-sensor none;gyroscope none;magnetometer none;payment none;usb none;vr none;xr-spatial-tracking none;";
 
   client_max_body_size {{ item.value.client_max_body_size|default('50M') }};
 
@@ -164,6 +190,7 @@ server {
   }
 {% endif %}
 
+
   location /userbook {
     proxy_pass            http://directory.{{ item.value.upstream_suffix }};
     proxy_read_timeout    90;
@@ -191,14 +218,18 @@ server {
 
 {% if item.value.upstreams is defined %}
 {% for upstream in item.value.upstreams %}
-{% if upstream.name != 'portal' %}
+{% if upstream.name == 'portal' %}
+  location / {
+{% elif upstream.name == 'directory-import' and item.value.directoryImport_host is defined %}
+  location = /{{ upstream.location }} {
+{% elif upstream.name == 'directory-pronote' and item.value.directoryPronote_host is defined %}
+  location = /{{ upstream.location }} {
+{% else %}
 {% if upstream.location is defined %}
   location /{{ upstream.location }} {
 {% else %}
   location /{{ upstream.name }} {
 {% endif %}
-{% else %}
-  location / {
 {% endif %}
     proxy_pass            http://{{ upstream.name }}.{{ item.value.upstream_suffix }};
     proxy_redirect        off;
@@ -234,10 +265,37 @@ server {
          return 204;
     }
 {% endif %}
-  }
+{% if upstream.name == 'edt' %}
+    location ~* /edt/structures/.*/sts {
+        proxy_pass            http://{{ upstream.name }}.{{ item.value.upstream_suffix }};
+        proxy_redirect        off;
+        proxy_set_header      Host $host;
+        proxy_set_header      X-Real-IP $remote_addr;
+        proxy_set_header      X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header      X-Forwarded-Proto $scheme;
+        proxy_read_timeout    {{ upstream.proxy_read_timeout|default('90') }};
+        proxy_connect_timeout {{ upstream.proxy_connect_timeout|default('90') }};
+        proxy_intercept_errors off;
+    }
+{% elif upstream.name == 'cas' %}
+    location ~* /cas/configuration/mappings {
+        proxy_pass            http://{{ upstream.name }}.{{ item.value.upstream_suffix }};
+        proxy_redirect        off;
+        proxy_set_header      Host $host;
+        proxy_set_header      X-Real-IP $remote_addr;
+        proxy_set_header      X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header      X-Forwarded-Proto $scheme;
+        proxy_read_timeout    {{ upstream.proxy_read_timeout|default('90') }};
+        proxy_connect_timeout {{ upstream.proxy_connect_timeout|default('90') }};
+        proxy_intercept_errors off;
+    }
+{% endif %}
+}
   
 {% endfor %}
 {% endif %}
+
+
 
 {% if item.value.etherpad_host is defined %}
   location = /pad                { deny all; }

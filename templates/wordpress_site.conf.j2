@@ -38,6 +38,13 @@ server {
   access_log            /var/log/nginx/{{ item.value.server_name | replace(' ', '_') }}.access.log upstream_time {% if ignore_logs %}if=$log_ip{% endif %};
     error_log             /var/log/nginx/{{ item.value.server_name | replace(' ', '_') }}.error.log;
 
+  client_max_body_size {{ item.value.client_max_body_size | default('2M')  }};
+
+{% if item.value.auth_basic_file_all is defined %}
+    auth_basic                  "Restricted";
+    auth_basic_user_file        {{ item.value.auth_basic_file_all }};
+{% endif %}
+
   location / {
     proxy_redirect off;
     proxy_set_header Host $host;
@@ -49,6 +56,10 @@ server {
   }
 
   location /wp-admin {
+{% if item.value.auth_basic_file is defined %}
+    auth_basic                  "Restricted";
+    auth_basic_user_file        {{ item.value.auth_basic_file }};
+{% endif %}
     proxy_redirect off;
     proxy_set_header Host $host;
     proxy_set_header X-Real-IP $remote_addr;
@@ -59,6 +70,10 @@ server {
   }
 
   location ~ wp-login\.php {
+{% if item.value.auth_basic_file is defined %}
+    auth_basic                  "Restricted";
+    auth_basic_user_file        {{ item.value.auth_basic_file }};
+{% endif %}
     proxy_redirect off;
     proxy_set_header Host $host;
     proxy_set_header X-Real-IP $remote_addr;
