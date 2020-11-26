@@ -1,47 +1,21 @@
 {% if item.value.upstreams is defined %}
 {% for upstream in item.value.upstreams %}
 upstream {{ upstream.name }}.{{ item.value.upstream_suffix }} {
-{% if upstream.name == 'video' and item.value.video_host is defined %}
-  {% for video_node in item.value.video_host %}
-server     {{ video_node }}:{{ upstream.port }} max_fails=3 fail_timeout=5s;
-  {% endfor %}
-{% elif upstream.name == 'auth' and item.value.auth_nodes is defined %}
- {% for auth_node in item.value.auth_nodes %}
-server     {{ auth_node }}:{{ upstream.port }}  max_fails=3 fail_timeout=5s;
- {% endfor %}
-{% elif (upstream.name == 'zimbra' or upstream.name == 'apizimbra') and item.value.zimbra_nodes is defined %}
- {% for zimbra_node in item.value.zimbra_nodes %}
-server     {{ zimbra_node }}:{{ upstream.port }}  max_fails=3 fail_timeout=5s;
- {% endfor %}
-{% elif upstream.name == 'presences' and item.value.presences_nodes is defined %}
- {% for presences_node in item.value.presences_nodes %}
-server     {{ presences_node }}:{{ upstream.port }}  max_fails=3 fail_timeout=5s;
- {% endfor %}
-{% elif upstream.name == 'archive' and item.value.archive_nodes is defined %}
- {% for archive_node in item.value.archive_nodes %}
-server     {{ archive_node }}:{{ upstream.port }}  max_fails=3 fail_timeout=5s;
- {% endfor %}
-{% elif upstream.name == 'directory-pronote' and item.value.directoryPronote_host is defined %}
-server     {{ item.value.directoryPronote_host }}:{{ upstream.port }}  max_fails=3 fail_timeout=5s;
-{% elif upstream.name == 'directory-import' and item.value.directoryImport_host is defined %}
-server     {{ item.value.directoryImport_host }}:{{ upstream.port }}  max_fails=3 fail_timeout=5s;
+{% if hostvars[inventory_hostname]['ent_sites'][item.key][upstream.name + '_nodes'] is defined %}
+{% for node in hostvars[inventory_hostname]['ent_sites'][item.key][upstream.name + '_nodes'] %}
+	server     {{ node }}:{{ upstream.port }} max_fails=3 fail_timeout=5s;
+{% endfor %}
 {% else %}
-  {% for node in item.value.nodes %}
-{% if node.hz %}
-  server     {{ node.name }}:{{ upstream.port }}  max_fails=3 fail_timeout=5s;
-{% else %}
- {% if upstream.name != 'directory' and upstream.name != 'workspace' %}
-  server     {{ node.name }}:{{ upstream.port }}  max_fails=3 fail_timeout=5s;
- {% endif %}
-{% endif %}
-  {% endfor %}
+{% for node in item.value.nodes %}
+ 	server     {{ node }}:{{ upstream.port }}  max_fails=3 fail_timeout=5s;
+{% endfor %}
 {% endif %}
 {% if item.value.upstream_options is defined %}
 {% for upstream_option in item.value.upstream_options %}
-  {{ upstream_option }}
+    {{ upstream_option }}
 {% endfor %}
 {% endif %}
-}
+} 
 {% endfor %}
 {% endif %}
 
