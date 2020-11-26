@@ -134,6 +134,8 @@ default_apps:
     port: 8028
   - name: 'rack'
     port: 8031
+    proxy_read_timeout: 180
+    proxy_connect_timeout: 180
   - name: 'bookmark'
     port: 8032
   - name: 'community'
@@ -305,6 +307,8 @@ default_apps_2d:
     port: 8028
   - name: 'rack'
     port: 8031
+    proxy_read_timeout: 180
+    proxy_connect_timeout: 180
   - name: 'bookmark'
     port: 8032
   - name: 'community'
@@ -458,6 +462,8 @@ default_apps_1d:
     port: 8028
   - name: 'rack'
     port: 8031
+    proxy_read_timeout: 180
+    proxy_connect_timeout: 180
   - name: 'collaborativeeditor'
     port: 8668
   - name: 'bookmark'
