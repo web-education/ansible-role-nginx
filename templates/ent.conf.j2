@@ -29,13 +29,6 @@ map $remote_addr $log_ip {
 }
 {% endif %}
 
-{% if item.value.cache is defined and item.value.cache %}
-map $request_uri $expires {
-  ~*assets/ 1h;
-  ~*public/ 1h;
-}
-{% endif %}
-
 server {
   listen                *:80;
   server_name           {{ item.value.server_name }};
@@ -164,36 +157,12 @@ server {
   }
 {% endif %}
 
-
-  location /userbook {
-    proxy_pass            http://directory.{{ item.value.upstream_suffix }};
-    proxy_read_timeout    90;
-    proxy_connect_timeout 90;
-    proxy_redirect        off;
-
-    proxy_set_header      Host $host;
-    proxy_set_header      X-Real-IP $remote_addr;
-    proxy_set_header      X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header      X-Forwarded-Proto $scheme;
-{% if item.value.cors is defined %}
-    # CORS configuration
-    add_header 'Access-Control-Allow-Origin' '{{item.value.cors}}';
-    add_header 'Access-Control-Allow-Methods' 'POST';
-    add_header 'Access-Control-Allow-Methods' 'PUT';
-    add_header 'Access-Control-Allow-Headers' 'authorization';
-    add_header 'Access-Control-Allow-Credentials' 'true';
-	add_header 'Access-Control-Expose-Headers' 'Location';
-    if ($request_method = 'OPTIONS') {
-         return 204;
-    }
-{% endif %}
-
-  }
-
 {% if item.value.upstreams is defined %}
 {% for upstream in item.value.upstreams %}
 {% if upstream.name == 'portal' %}
   location / {
+{% elif upstream.name == 'directory' %}
+  location /userbook {
 {% elif upstream.name == 'directory-import' and item.value.directoryImport_host is defined %}
   location = /{{ upstream.location }} {
 {% elif upstream.name == 'directory-pronote' and item.value.directoryPronote_host is defined %}
@@ -265,16 +234,12 @@ server {
     }
 {% endif %}
 }
-  
 {% endfor %}
 {% endif %}
-
-
 
 {% if item.value.etherpad_host is defined %}
   location = /pad                { deny all; }
   location = /pad/                { deny all; }
-
   location /pad {
     rewrite ^/pad(/.*)$ $1 break;
     proxy_pass        http://{{ item.value.etherpad_host }}:8102;
@@ -299,18 +264,6 @@ server {
          return 204;
     }
 {% endif %}
-
-  }
-{% endif %}
-
-{% if item.value.gomail_host is defined %}
-  location /pixel {
-    proxy_pass        http://{{ item.value.gomail_host }}:7500;
-    proxy_buffering   off;
-    proxy_set_header  Host             $host;
-    proxy_set_header  X-Real-IP        $remote_addr;
-    proxy_set_header  X-Forwarded-For  $proxy_add_x_forwarded_for;
-    proxy_set_header  X-Forwarded-Proto $scheme;
   }
 {% endif %}
 
@@ -326,19 +279,7 @@ server {
   }
 {% endif %}
 
-{%  if item.value.serve_assets is defined and item.value.serve_assets %}
-  location /assets/ {
-    root {{ item.value.document_root }};
-    autoindex off;
-    index index.html index.htm index.php;
-    add_header Cache-Control must-revalidate;
-    etag on;
-    if_modified_since exact;
-    expires epoch;
-  }
-{% endif %}
-
-{% if item.value.serve_statics %}
+{% if item.value.serve_statics is defined and  item.value.serve_statics %}
   location /404.html {
     root {{ item.value.statics_path }}/errors;
   }
@@ -361,43 +302,29 @@ server {
     autoindex off;
     index     index.html index.htm index.php;
   }
-
+{% endif %}
 
 {% if item.value.upstreams is defined %}
 {% for upstream in item.value.upstreams %}
 {% if upstream != 'portal' %}
-{% if upstream.location is defined %}
+ {% if upstream.location is defined %}
   location /{{ upstream.location }}/public/ {
-{% else %}
+ {% else %}
   location /{{ upstream.name }}/public/ {
-{% endif %}
-    {% if item.value.cors is defined and item.value.cors and upstream.cors is defined  %}
-    if ($request_method = 'OPTIONS') {
-      add_header 'Access-Control-Allow-Origin' '{{item.value.cors}}';
-      add_header 'Access-Control-Allow-Methods' 'GET, OPTIONS';
-      add_header 'Access-Control-Max-Age' 86400;
-      add_header 'Content-Type' 'text/plain charset=UTF-8';
-      add_header 'Content-Length' 0;
-      return 204;
-    }
-    if ($request_method = 'GET') {
-      add_header 'Access-Control-Allow-Origin' '{{item.value.cors}}';
-      add_header 'Access-Control-Allow-Methods' 'GET, OPTIONS';
-    }
-
-
-    {% endif %}
-
-    root {{ item.value.statics_path }};
+ {% endif %}
 {% else %}
   location /public/ {
-    root {{ item.value.statics_path }}/portal/;
 {% endif %}
-    autoindex off;
-    index index.html index.htm index.php;
+    add_header            X-Cache-Status $upstream_cache_status;
+    proxy_cache           {{ item.value.cache }};
+    proxy_ignore_headers  "Set-Cookie";
+    proxy_hide_header     "Set-Cookie";
+    proxy_cache_valid     200 1y;
+    proxy_pass            http://{{ upstream.name }}.{{ item.value.upstream_suffix }};
+    proxy_redirect        off;
+    proxy_read_timeout    {{ upstream.proxy_read_timeout|default('90') }};
+    proxy_connect_timeout {{ upstream.proxy_connect_timeout|default('90') }};    
   }
 {% endfor %}
-{% endif %}
-  
 {% endif %}
 }
