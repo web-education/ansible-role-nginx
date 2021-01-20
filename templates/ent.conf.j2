@@ -279,7 +279,7 @@ server {
   }
 {% endif %}
 
-{% if item.value.serve_statics is defined and  item.value.serve_statics %}
+{% if item.value.statics_path is defined %}
   location /404.html {
     root {{ item.value.statics_path }}/errors;
   }
