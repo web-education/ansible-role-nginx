@@ -292,7 +292,7 @@ server {
   location /503-covid.html {
     root {{ item.value.statics_path }}/errors;
   }
-  location /help-1d/ {
+{#   location /help-1d/ {
     root      {{ item.value.statics_path }};
     autoindex off;
     index     index.html index.htm index.php;
@@ -301,7 +301,18 @@ server {
     root      {{ item.value.statics_path }};
     autoindex off;
     index     index.html index.htm index.php;
+  } #}
+  location /help/ {
+    set $args '';
+    rewrite ^/help/application/(.*)      /assets/application-help/help-2d/application/$1/index.html last;
+    rewrite ^/help/assets/(.*)       /assets/application-help/help-2d/assets/$1 last;
   }
+  location /help-1d/ {
+    set $args '';
+    rewrite ^/help-1d/application/(.*)      /assets/application-help-1d/help-1d/application/$1/index.html last;
+    rewrite ^/help-1d/assets/(.*)       /assets/application-help-1d/help-1d/assets/$1 last;
+  }
+
 {% endif %}
 
 {% if item.value.upstreams is defined %}
