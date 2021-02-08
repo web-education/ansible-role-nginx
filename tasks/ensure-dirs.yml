@@ -17,4 +17,4 @@
   file: path={{ item }} state=directory owner={{nginx_user}} group={{nginx_group}} mode=0755 recurse=yes
   when: nginx_cache_dir is defined
   with_items: "{{ nginx_cache_dir }}"
-  tags: [configuration,nginx]
+  tags: [configuration,nginx,extra]
