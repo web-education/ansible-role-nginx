@@ -161,8 +161,6 @@ server {
 {% for upstream in item.value.upstreams %}
 {% if upstream.name == 'portal' %}
   location / {
-{% elif upstream.name == 'directory' %}
-  location /userbook {
 {% elif upstream.name == 'directory-import' and item.value.directoryImport_host is defined %}
   location = /{{ upstream.location }} {
 {% elif upstream.name == 'directory-pronote' and item.value.directoryPronote_host is defined %}

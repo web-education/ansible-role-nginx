@@ -84,6 +84,10 @@ default_apps:
     proxy_read_timeout: 600
     proxy_connect_timeout: 600
     location: 'directory/timetable/import'
+  - name: 'userbook'
+    port: 8003
+    proxy_read_timeout: 600
+    proxy_connect_timeout: 600
   - name: 'directory'
     port: 8003
     proxy_read_timeout: 600
@@ -258,6 +262,10 @@ default_apps_2d:
     proxy_read_timeout: 600
     proxy_connect_timeout: 600
     location: 'directory/timetable/import'
+  - name: 'userbook'
+    port: 8003
+    proxy_read_timeout: 600
+    proxy_connect_timeout: 600
   - name: 'directory'
     port: 8003
     proxy_read_timeout: 600
@@ -422,6 +430,10 @@ default_apps_1d:
     proxy_read_timeout: 600
     proxy_connect_timeout: 600
     location: 'directory/timetable/import'
+  - name: 'userbook'
+    port: 8003
+    proxy_read_timeout: 600
+    proxy_connect_timeout: 600
   - name: 'directory'
     port: 8003
     proxy_read_timeout: 600
