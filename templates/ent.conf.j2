@@ -294,13 +294,28 @@ server {
 
   location /help/ {
     set $args '';
-    rewrite ^/help/application/(.*)      /assets/application-help/help-2d/application/$1/index.html last;
+    rewrite ^/help/application/(.*)          /assets/application-help/help-2d/application/$1/index.html last;
     rewrite ^/help/assets/(.*)(\s|%20)(.*)$ '/assets/application-help/help-2d/assets/$1 $3' last;
   }
+
+  location /help-2d/ {
+    set $args '';
+    rewrite ^/help-2d/application/(.*)                 /assets/application-help/help-2d/application/$1/index.html last;
+    rewrite ^/help-2d/assets/([^\s]+)(\s|%20)+(.*png)$ '/assets/application-help/help-2d/assets/$1.png' last;
+    rewrite ^/help-2d/assets/([^\s]+)(\s|%20)+(.*PNG)$ '/assets/application-help/help-2d/assets/$1.PNG' last;
+    rewrite ^/help-2d/assets/([^\s]+)(\s|%20)+(.*jpg)$ '/assets/application-help/help-2d/assets/$1.jpg' last;
+    rewrite ^/help-2d/assets/([^\s]+)(\s|%20)+(.*JPG)$ '/assets/application-help/help-2d/assets/$1.JPG' last;
+    rewrite ^/help-2d/assets/(.*)                       /assets/application-help/help-2d/assets/$1 last;
+  }
+
   location /help-1d/ {
     set $args '';
-    rewrite ^/help-1d/application/(.*)      /assets/application-help-1d/help-1d/application/$1/index.html last;
-    rewrite ^/help-1d/assets/(.*)(\s|%20)(.*)$ '/assets/application-help/help-1d/assets/$1 $3' last;
+    rewrite ^/help-1d/application/(.*)                  /assets/application-help-1d/help-1d/application/$1/index.html last;
+    rewrite ^/help-1d/assets/([^\s]+)(\s|%20)+(.*png)$ '/assets/application-help-1d/help-1d/assets/$1.png' last;
+    rewrite ^/help-1d/assets/([^\s]+)(\s|%20)+(.*PNG)$ '/assets/application-help-1d/help-1d/assets/$1.PNG' last;
+    rewrite ^/help-1d/assets/([^\s]+)(\s|%20)+(.*jpg)$ '/assets/application-help-1d/help-1d/assets/$1.jpg' last;
+    rewrite ^/help-1d/assets/([^\s]+)(\s|%20)+(.*JPG)$ '/assets/application-help-1d/help-1d/assets/$1.JPG' last;
+    rewrite ^/help-1d/assets/(.*)                       /assets/application-help-1d/help-1d/assets/$1 last;
   }
 
 {% if item.value.upstreams is defined %}
