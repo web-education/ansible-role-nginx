@@ -247,6 +247,8 @@ default_apps:
     port: '8057'
   - name: 'formulaire'
     port: '8067'
+  - name: 'explorer'
+    port: '8068'
 default_apps_2d:
   - name: 'portal'
     port: 8017
