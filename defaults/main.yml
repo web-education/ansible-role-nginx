@@ -542,3 +542,5 @@ default_apps_1d:
     port: '8057'
   - name: 'statistics-presences'
     port: '8065'
+  - name: 'formulaire'
+    port: '8067'
