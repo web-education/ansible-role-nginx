@@ -140,8 +140,6 @@ default_apps:
     port: 8032
   - name: 'community'
     port: 8078
-  - name: 'eliot'
-    port: 8029
   - name: 'poll'
     port: 8070
   - name: 'collaborativewall'
@@ -237,6 +235,10 @@ default_apps:
     port: '8066'
   - name: 'video'
     port: '8058'
+    proxy_read_timeout: 600
+    proxy_connect_timeout: 600
+    options:
+      - 'client_max_body_size 250M'
   - name: 'homework-assistance'
     port: '8330'
   - name: 'sqool'
@@ -314,8 +316,6 @@ default_apps_2d:
   - name: 'community'
     cors: yes
     port: 8078
-  - name: 'eliot'
-    port: 8029
   - name: 'poll'
     port: 8070
   - name: 'collaborativewall'
@@ -397,6 +397,10 @@ default_apps_2d:
     port: '8066'
   - name: 'video'
     port: '8058'
+    proxy_read_timeout: 600
+    proxy_connect_timeout: 600
+    options:
+      - 'client_max_body_size 250M'
   - name: 'homework-assistance'
     port: '8330'
   - name: 'sqool'
@@ -470,8 +474,6 @@ default_apps_1d:
     port: 8032
   - name: 'community'
     port: 8078
-  - name: 'eliot'
-    port: 8029
   - name: 'cursus'
     port: 8085
   - name: 'maxicours'
@@ -530,6 +532,10 @@ default_apps_1d:
     port: '8066'
   - name: 'video'
     port: '8058'
+    proxy_read_timeout: 600
+    proxy_connect_timeout: 600
+    options:
+      - 'client_max_body_size 250M'
   - name: 'homework-assistance'
     port: '8330'
   - name: 'sqool'

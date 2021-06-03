@@ -1,0 +1,17 @@
+---
+- name: Create the configurations for CDN sites
+  template: src=cdn.conf.j2 dest={{nginx_conf_dir}}/sites-available/{{ item.key }}.conf
+  when: cdn_sites is defined
+  tags: [cdn,nginx,entnonha]
+
+- name: Create the document_root
+  file: path={{ hostvars[inventory_hostname]['cdn_sites'][item.key]['document_root']}} state=directory owner=root group={{nginx_group}} mode=0755
+  when: cdn_sites is defined
+  tags: [cdn,nginx,entnonha]
+
+- name: Create links for CDN sites
+  file: state=link src={{nginx_conf_dir}}/sites-available/{{ item.key }}.conf dest={{nginx_conf_dir}}/sites-enabled/{{ item.key }}.conf
+  when: cdn_sites is defined
+  notify:
+   - reload nginx
+  tags: [cdn,nginx,entnonha]

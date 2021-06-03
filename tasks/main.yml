@@ -20,6 +20,9 @@
 - include: configuration-spip.yml
   with_dict: '{{ spip_sites }}'
   when: spip_sites is defined
+- include: configuration-cdn.yml
+  with_dict: '{{ cdn_sites }}'
+  when: cdn_sites is defined
 - include: reload.yml
 - include: logrotate.yml
   when: nginx_logrotate

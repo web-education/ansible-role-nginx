@@ -1,0 +1,39 @@
+server {
+  listen                *:80;
+  server_name           {{ item.value.server_name }};
+
+  if ($ssl_protocol = "") {
+       return 301 https://$host$request_uri;
+  }
+  index  index.html index.htm index.php;
+
+  access_log            /var/log/nginx/{{ item.value.server_name | replace(' ', '_') }}-80.access.log upstream_time;
+  error_log             /var/log/nginx/{{ item.value.server_name | replace(' ', '_') }}-80.error.log;
+}
+server {
+  listen       *:443 ssl http2;
+  server_name  {{ item.value.server_name }};
+
+  ssl_certificate           {{ item.value.ssl_certificate }};
+  ssl_certificate_key       {{ item.value.ssl_certificate_key }};
+  ssl_session_cache         shared:SSL:10m;
+  ssl_session_timeout       5m;
+  ssl_protocols             TLSv1.2 TLSv1.3;
+  ssl_ciphers               ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-DSS-AES128-GCM-SHA256:kEDH+AESGCM:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA:AES256-SHA:AES:CAMELLIA:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!aECDH;
+  ssl_prefer_server_ciphers on;
+
+  expires     {{ item.value.expires | default('600') }};
+  add_header 'Access-Control-Allow-Origin' '{{ item.value.origin }}' always;
+  add_header 'Access-Control-Allow-Method' '*' always;
+  add_header 'Access-Control-Allow-Headers' 'X-XSRF-TOKEN,x-requested-with,Pragma,If-Modified-Since,Cache-Control' always;
+  #add_header 'Access-Control-Allow-Headers' 'x-requested-with' always;
+
+  access_log            /var/log/nginx/{{ item.value.server_name | replace(' ', '_') }}.access.log upstream_time;
+  error_log             /var/log/nginx/{{ item.value.server_name | replace(' ', '_') }}.error.log;
+
+  if ($request_method = 'OPTIONS') {
+       return 204;
+  }
+
+  root {{ item.value.document_root }};
+}

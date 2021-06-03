@@ -47,7 +47,7 @@ server {
   proxy_intercept_errors on;
   error_page 404  /404.html;
   error_page 500 504 /50x.html;
-  error_page 502 /502.html;
+  error_page 502 /50x.html;
   error_page 503 /503-covid.html;
 
   if ($ssl_protocol = "") {
@@ -109,6 +109,13 @@ server {
 {% for option in item.value.options %}
   {{ option }}
 {% endfor %}
+{% endif %}
+
+{% if item.value.cdn is defined %}
+  location ~* /(?<app>.*)/public/dist/entcore/ng-app(?<tiret>-?)(?<hash>.*).js { 
+     add_header Cache-Control no-store;
+     return 302 https://{{ item.value.cdn }}/$app/public/dist/entcore/ng-app$tiret$hash.js;
+  }
 {% endif %}
 
   rewrite ^/cas/logout$ {{ item.value.logout_cas|default('/timeline/timeline') }} redirect; 
@@ -206,6 +213,11 @@ server {
 {% else %}
   location /{{ upstream.name }} {
 {% endif %}
+{% endif %}
+{% if hostvars[inventory_hostname]['ent_sites'][item.key][upstream.name + '_options'] is defined %}
+{% for option in hostvars[inventory_hostname]['ent_sites'][item.key][upstream.name + '_options'] %}
+    {{ option }}
+{% endfor %}
 {% endif %}
     proxy_pass            http://{{ upstream.name }}.{{ item.value.upstream_suffix }};
     proxy_redirect        off;
@@ -369,13 +381,20 @@ server {
 
 {% if item.value.upstreams is defined %}
 {% for upstream in item.value.upstreams %}
-{% if upstream != 'portal' %}
+{% if upstream.name == 'portal' %}
+  location /public/ {
+    root {{ item.value.statics_path }}/portal/;
+{% else %}
 {% if upstream.location is defined %}
   location /{{ upstream.location }}/public/ {
 {% else %}
   location /{{ upstream.name }}/public/ {
 {% endif %}
-    {% if item.value.cors is defined and item.value.cors and upstream.cors is defined  %}
+    root {{ item.value.statics_path }};
+{% endif %}
+    autoindex off;
+    index index.html index.htm index.php;
+{% if item.value.cors is defined and item.value.cors and upstream.cors is defined  %}
     if ($request_method = 'OPTIONS') {
       add_header 'Access-Control-Allow-Origin' '{{item.value.cors}}';
       add_header 'Access-Control-Allow-Methods' 'GET, OPTIONS';
@@ -388,17 +407,7 @@ server {
       add_header 'Access-Control-Allow-Origin' '{{item.value.cors}}';
       add_header 'Access-Control-Allow-Methods' 'GET, OPTIONS';
     }
-
-
-    {% endif %}
-
-    root {{ item.value.statics_path }};
-{% else %}
-  location /public/ {
-    root {{ item.value.statics_path }}/portal/;
 {% endif %}
-    autoindex off;
-    index index.html index.htm index.php;
   }
 {% endfor %}
 {% endif %}
