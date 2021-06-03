@@ -209,6 +209,8 @@ default_apps:
     port: '8063'
   - name: 'statistics-presences'
     port: '8065'
+  - name: 'formulaire'
+    port: '8067'
   - name: 'schooltoring'
     port: '8141'
   - name: 'mediacentre'
@@ -407,6 +409,8 @@ default_apps_2d:
     port: '8057'
   - name: 'statistics-presences'
     port: '8065'
+  - name: 'formulaire'
+    port: '8067'
 default_apps_1d:
   - name: 'portal'
     port: 8017
