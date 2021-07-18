@@ -1,0 +1,17 @@
+---
+- name: Create the configurations for Static git sites
+  template: src=static_git_site.j2 dest={{nginx_conf_dir}}/sites-available/{{ item.key }}.conf
+  when: static_git_sites is defined
+  tags: [staticgit,nginx,entnonha]
+
+- name: Create the document_root
+  file: path={{ hostvars[inventory_hostname]['static_git_sites'][item.key]['document_root']}} state=directory owner=root group={{nginx_group}} mode=0755
+  when: static_git_sites is defined
+  tags: [staticgit,nginx,entnonha]
+
+- name: Create links for Static git sites
+  file: state=link src={{nginx_conf_dir}}/sites-available/{{ item.key }}.conf dest={{nginx_conf_dir}}/sites-enabled/{{ item.key }}.conf
+  when: static_git_sites is defined
+  notify:
+   - reload nginx
+  tags: [staticgit,nginx,entnonha]

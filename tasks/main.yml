@@ -23,6 +23,9 @@
 - include: configuration-cdn.yml
   with_dict: '{{ cdn_sites }}'
   when: cdn_sites is defined
+- include: configuration-staticgit.yml
+  with_dict: '{{ static_git_sites }}'
+  when: static_git_sites is defined
 - include: reload.yml
 - include: logrotate.yml
   when: nginx_logrotate
